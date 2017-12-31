@@ -1,0 +1,4 @@
+services:
+#    andy_diffuse_river.example:
+#        class: Andy\DiffuseRiverBundle\Example
+#        arguments: ["@service_id", "plain_value", "%parameter%"]

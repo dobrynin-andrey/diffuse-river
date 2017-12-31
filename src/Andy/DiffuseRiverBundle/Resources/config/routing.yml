@@ -1,0 +1,3 @@
+andy_diffuse_river_homepage:
+    path:     /
+    defaults: { _controller: AndyDiffuseRiverBundle:Default:index }

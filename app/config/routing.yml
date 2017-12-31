@@ -1,3 +1,3 @@
-app:
-    resource: '@AppBundle/Controller/'
-    type: annotation
+andy_diffuse_river:
+    resource: "@AndyDiffuseRiverBundle/Resources/config/routing.yml"
+    prefix:   /
