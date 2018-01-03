@@ -1,15 +1,15 @@
  $(document).ready(function () {
      "use strict";
      // toat popup js
-     $.toast({
+     /*$.toast({
          heading: 'Welcome to Ample admin',
          text: 'Use the predefined ones, or specify a custom position object.',
          position: 'top-right',
          loaderBg: '#fff',
-         icon: 'warning',
+         icon: 'success',
          hideAfter: 3500,
          stack: 6
-     })
+     });*/
 
 
      //ct-visits
