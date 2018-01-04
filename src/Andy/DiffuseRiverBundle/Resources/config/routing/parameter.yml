@@ -1,0 +1,24 @@
+parameter_index:
+    path:     /
+    defaults: { _controller: "AndyDiffuseRiverBundle:Parameter:index" }
+    methods:  GET
+
+parameter_show:
+    path:     /{id}/show
+    defaults: { _controller: "AndyDiffuseRiverBundle:Parameter:show" }
+    methods:  GET
+
+parameter_new:
+    path:     /new
+    defaults: { _controller: "AndyDiffuseRiverBundle:Parameter:new" }
+    methods:  [GET, POST]
+
+parameter_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "AndyDiffuseRiverBundle:Parameter:edit" }
+    methods:  [GET, POST]
+
+parameter_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "AndyDiffuseRiverBundle:Parameter:delete" }
+    methods:  DELETE

@@ -1,0 +1,43 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Parameters list</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Name</th>
+                <th>Code</th>
+                <th>Edizm</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for parameter in parameters %}
+            <tr>
+                <td><a href="{{ path('parameter_show', { 'id': parameter.id }) }}">{{ parameter.id }}</a></td>
+                <td>{{ parameter.name }}</td>
+                <td>{{ parameter.code }}</td>
+                <td>{{ parameter.edIzm }}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('parameter_show', { 'id': parameter.id }) }}">show</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('parameter_edit', { 'id': parameter.id }) }}">edit</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('parameter_new') }}">Create a new parameter</a>
+        </li>
+    </ul>
+{% endblock %}
