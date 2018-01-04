@@ -3,6 +3,7 @@
 namespace Andy\DiffuseRiverBundle\Controller;
 
 use Andy\DiffuseRiverBundle\Entity\Project;
+use Andy\DiffuseRiverBundle\Entity\Point;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -17,13 +18,36 @@ class ProjectController extends Controller
      * Finds and displays a project entity.
      *
      */
-    public function showAction(Project $project)
+    public function showAction(Request $request, Project $project)
     {
-        $deleteForm = $this->createDeleteForm($project);
 
-        return $this->render('@AndyDiffuseRiver/Project/show.html.twig', array(
+        // Вывести все точки проекта
+        $em = $this->getDoctrine()->getManager();
+
+        $points = $em->getRepository('AndyDiffuseRiverBundle:Point')->findBy(array(
+            'projectId' => $project->getId()
+        ));
+
+
+        // Форма создания новой точки
+
+        $point = new Point();
+        $point->setProjectId((int)$project->getId());
+        $form = $this->createForm('Andy\DiffuseRiverBundle\Form\PointType', $point);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($point);
+            $em->flush();
+
+            return $this->redirectToRoute('project_show', array('id' => $project->getId()));
+        }
+
+        return $this->render('@AndyDiffuseRiver/Project/show.html.twig',  array(
+            'points' => $points,
             'project' => $project,
-            'delete_form' => $deleteForm->createView(),
+            'form' => $form->createView(),
         ));
     }
 

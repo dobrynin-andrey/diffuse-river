@@ -1,0 +1,14 @@
+point_show:
+    path:     /{project}/point/{id}/
+    defaults: { _controller: "AndyDiffuseRiverBundle:Point:show" }
+    methods:  [GET, POST]
+
+point_edit:
+    path:     /{project}/point/{id}/edit
+    defaults: { _controller: "AndyDiffuseRiverBundle:Point:edit" }
+    methods:  [GET, POST]
+
+point_delete:
+    path:     /{project}/point/{id}/delete
+    defaults: { _controller: "AndyDiffuseRiverBundle:Point:delete" }
+    methods:  DELETE

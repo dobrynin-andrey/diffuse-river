@@ -1,7 +1,7 @@
 project_show:
-    path:     /{id}/show
+    path:     /{id}/
     defaults: { _controller: "AndyDiffuseRiverBundle:Project:show" }
-    methods:  GET
+    methods:  [GET, POST]
 
 project_edit:
     path:     /{id}/edit

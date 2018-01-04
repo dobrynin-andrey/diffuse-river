@@ -2,18 +2,17 @@
 
 namespace Andy\DiffuseRiverBundle\Entity;
 
-
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * Project
+ * Point
  *
- * @ORM\Table(name="project")
- * @ORM\Entity(repositoryClass="Andy\DiffuseRiverBundle\Repository\ProjectRepository")
+ * @ORM\Table(name="point")
+ * @ORM\Entity(repositoryClass="Andy\DiffuseRiverBundle\Repository\PointRepository")
  * @ORM\HasLifecycleCallbacks
  */
-class Project
+class Point
 {
 
     // В конструкторе вызываем функции по добавлению даты создания и обновления
@@ -33,35 +32,51 @@ class Project
         $this->setUpdatedDate(new \DateTime());
     }
 
+
     /**
      * @var int
      *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
-     * @ORM\OneToMany(targetEntity="Andy\DiffuseRiverBundle\Entity\Point", mappedBy="project_id")
      */
     private $id;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="name", type="string", length=500)
+     * @ORM\Column(name="name", type="string", length=255)
      *
      * @Assert\NotBlank()
      * @Assert\Length(
      *     min="4",
-     *     max="500",
+     *     max="255",
      *     minMessage="Название не должно быть менее 4 символов.",
-     *     maxMessage="Название не должно быть более 500 символов."
+     *     maxMessage="Название не должно быть более 255 символов."
      * )
      */
     private $name;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="coords", type="string", length=500)
+     *
+     * @Assert\NotBlank()
+     * @Assert\Length(
+     *     min="4",
+     *     max="500",
+     *     minMessage="Координаты не должны быть менее 4 символов.",
+     *     maxMessage="Координаты не должны быть более 500 символов."
+     * )
+     */
+    private $coords;
+
+    /**
      * @var \DateTime
      *
      * @ORM\Column(name="created_date", type="datetime")
+     *
      */
     private $createdDate;
 
@@ -71,6 +86,15 @@ class Project
      * @ORM\Column(name="updated_date", type="datetime")
      */
     private $updatedDate;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="project_id", type="integer")
+     * @ORM\ManyToOne(targetEntity="Andy\DiffuseRiverBundle\Entity\Project", inversedBy="id")
+     * @ORM\JoinColumn(name="project_id", referencedColumnName="id")
+     */
+    private $projectId;
 
 
     /**
@@ -88,7 +112,7 @@ class Project
      *
      * @param string $name
      *
-     * @return Project
+     * @return Point
      */
     public function setName($name)
     {
@@ -108,11 +132,35 @@ class Project
     }
 
     /**
+     * Set coords
+     *
+     * @param string $coords
+     *
+     * @return Point
+     */
+    public function setCoords($coords)
+    {
+        $this->coords = $coords;
+
+        return $this;
+    }
+
+    /**
+     * Get coords
+     *
+     * @return string
+     */
+    public function getCoords()
+    {
+        return $this->coords;
+    }
+
+    /**
      * Set createdDate
      *
      * @param \DateTime $createdDate
      *
-     * @return Project
+     * @return Point
      */
     public function setCreatedDate($createdDate)
     {
@@ -136,7 +184,7 @@ class Project
      *
      * @param \DateTime $updatedDate
      *
-     * @return Project
+     * @return Point
      */
     public function setUpdatedDate($updatedDate)
     {
@@ -155,5 +203,28 @@ class Project
         return $this->updatedDate;
     }
 
+    /**
+     * Set projectId
+     *
+     * @param integer $projectId
+     *
+     * @return Point
+     */
+    public function setProjectId($projectId)
+    {
+        $this->projectId = $projectId;
+
+        return $this;
+    }
+
+    /**
+     * Get projectId
+     *
+     * @return int
+     */
+    public function getProjectId()
+    {
+        return $this->projectId;
+    }
 }
 

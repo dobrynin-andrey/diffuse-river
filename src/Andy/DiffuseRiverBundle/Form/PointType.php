@@ -7,7 +7,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class ProjectType extends AbstractType
+class PointType extends AbstractType
 {
     /**
      * {@inheritdoc}
@@ -20,6 +20,13 @@ class ProjectType extends AbstractType
                 'attr' => array(
                     'class' => 'form-control'
                 )
+            ))
+            ->add('coords', TextType::class, array(
+                'label' => 'Координаты',
+                'attr' => array(
+                    'class' => 'form-control',
+                    'readonly' => 'true',
+                )
             ));
     }
     
@@ -29,7 +36,7 @@ class ProjectType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'Andy\DiffuseRiverBundle\Entity\Project'
+            'data_class' => 'Andy\DiffuseRiverBundle\Entity\Point'
         ));
     }
 
@@ -38,7 +45,7 @@ class ProjectType extends AbstractType
      */
     public function getBlockPrefix()
     {
-        return 'andy_diffuseriverbundle_project';
+        return 'andy_diffuseriverbundle_point';
     }
 
 

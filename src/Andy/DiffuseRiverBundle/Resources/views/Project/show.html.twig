@@ -1,5 +1,21 @@
 {% extends 'base.html.twig' %}
 
+{% block head_scripts %}
+    <script src="https://api-maps.yandex.ru/2.1/?lang=ru_RU" type="text/javascript"></script>
+{% endblock %}
+
+{% block title %}
+    {{ project.name }}
+{% endblock %}
+
+{% block page_title %}
+    {{ project.name }}
+{% endblock %}
+
+{% block breadcrumb %}
+    <li>{{ project.name }}</li>
+{% endblock %}
+
 {% block body %}
 
     <div class="row">
@@ -7,14 +23,14 @@
             <div class="white-box">
                 <div class="row sales-report">
                     <div class="col-md-6 col-sm-6 col-xs-12">
-                        <h1>{{ project.name }}</h1>
+                        <h1>Прокет: {{ project.name }}</h1>
 
                     </div>
                     <div class="col-md-6 col-sm-6 col-xs-12 ">
                         <div class="text-right text-info m-t-10">
                             <a href="{{ path('project_edit', { 'id': project.id }) }}">Изменить</a>
                             <br>
-                            <a href="{{ path('andy_diffuse_river_homepage') }}">Назад к списку</a>
+                            <a class="di m-t-5" href="{{ path('andy_diffuse_river_homepage') }}">Назад к списку</a>
                         </div>
                     </div>
                 </div>
@@ -25,4 +41,137 @@
             </div>
         </div>
     </div>
+
+    <!-- row -->
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="white-box">
+                <h3 class="box-title">Карта проекта</h3>
+                <div id="map" style="width: 100%; height: 600px"></div>
+
+            </div>
+        </div>
+    </div>
+
+    {# Новая точка проекта #}
+
+    <!-- .row -->
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="white-box">
+                <h3 class="box-title m-b-0">Новая точка</h3>
+                <p class="text-muted m-b-30 font-13">Укажите на карте новую точку проекта и введите название</p>
+                {{ form_start(form, {attr: {class: 'form-horizontal'} })  }}
+                <div class="form-group">
+                    <label for="{{ form.name.vars.id }}" class="col-md-12">{{ form_label(form.name) }}</label>
+                    {{ form_errors(form.name) }}
+                    <div class="col-md-12">
+                        {{ form_widget(form.name) }}
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="{{ form.coords.vars.id }}" class="col-md-12">{{ form_label(form.coords) }}</label>
+                    {{ form_errors(form.coords) }}
+                    <div class="col-md-12">
+                        {{ form_widget(form.coords) }}
+                    </div>
+                </div>
+                <button type="submit" class="btn waves-effect waves-light btn-success">Создать</button>
+                {{ form_end(form) }}
+            </div>
+        </div>
+    </div>
+
+    <script>
+        window.$inputCoords = '{{ form.coords.vars.id }}';
+        window.$points = {
+            name: [],
+            coords: []
+        };
+
+    {% for point in points %}
+        window.$points.name.push('{{ point.name }}');
+        window.$points.coords.push('{{ point.coords }}');
+    {% endfor %}
+
+    </script>
+
+    {% if points | length > 0 %}
+
+
+        <div class="row">
+            <div class="col-md-12 col-lg-12 col-sm-12">
+                <div class="white-box">
+                    <h2>Точки</h2>
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Название</th>
+                                <th>Координаты</th>
+                                <th>Дата создания</th>
+                                <th>Дата обновления</th>
+                                <th>Действия</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for point in points %}
+                                <tr>
+                                    <td>
+                                        {{ loop.index }}
+                                    </td>
+                                    <td class="txt-oflo">
+                                        <a href="{{ path('point_show', { 'project': project.id, 'id': point.id }) }}">
+                                            {{ point.name }}
+                                        </a>
+                                    </td>
+                                    <td class="txt-oflo">
+                                       {{ point.coords }}
+                                    </td>
+                                    <td class="txt-oflo">
+                                        {% if point.createdDate %}{{ point.createdDate|date('d.m.Y H:i') }}{% endif %}
+                                    </td>
+                                    <td class="txt-oflo">
+                                        {% if point.updatedDate %}{{ point.updatedDate|date('d.m.Y H:i') }}{% endif %}
+                                    </td>
+                                    <td>
+                                        <a href="{{ path('point_show', { 'project': project.id, 'id': point.id }) }}" data-toggle="tooltip" data-original-title="Показать">
+                                            <i class="fa fa-chain fa-fw" aria-hidden="true"></i>
+                                        </a> |&nbsp;
+                                        <a href="{{ path('point_edit', { 'project': project.id, 'id': point.id }) }}" data-toggle="tooltip" data-original-title="Изменить">
+                                            <i class="fa fa-pencil text-inverse m-r-10"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% else %}
+        <div class="row">
+            <div class="col-md-12 col-lg-12 col-sm-12">
+                <div class="white-box">
+                    <div class="row sales-report">
+                        <div class="col-md-6 col-sm-6 col-xs-6">
+                            <h1>Точек нет!</h1>
+                        </div>
+                        <div class="col-md-6 col-sm-6 col-xs-6 ">
+                            <h3 class="text-right text-info m-t-20"><a href="{{ path('project_show', { 'id': project.id }) }}">Создать новую</a></h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+
+
+
+{% endblock %}
+
+{% block javascripts %}
+    <script src="{{ asset('js/ymap.js') }}"></script>
 {% endblock %}

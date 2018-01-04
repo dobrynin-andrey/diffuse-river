@@ -1,19 +1,11 @@
 {% extends "base.html.twig" %}
 
+{% block page_title %}
+Рабочий стол
+{% endblock %}
+
 {% block body %}
 
-    <div class="container-fluid">
-        <div class="row bg-title">
-            <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
-                <h4 class="page-title">Рабочий стол</h4> </div>
-            <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
-               {# <a href="{{ path('project_new') }}" class="btn btn-danger pull-right m-l-20 hidden-xs hidden-sm waves-effect waves-light">Создать новый проект</a>
-                <ol class="breadcrumb">
-                    <li><a href="/">Рабочий стол</a></li>
-                </ol>#}
-            </div>
-            <!-- /.col-lg-12 -->
-        </div>
         <!-- /.row -->
 
         {#<!-- ============================================================== -->
@@ -88,7 +80,7 @@
                         {{ form_widget(form.name) }}
                     </div>
                 </div>
-                <button type="submit" class="btn waves-effect waves-light btn-info">Создать</button>
+                <button type="submit" class="btn waves-effect waves-light btn-success">Создать</button>
                 {{ form_end(form) }}
             </div>
         </div>
@@ -158,7 +150,7 @@
                             <h1>Проектов нет!</h1>
                         </div>
                         <div class="col-md-6 col-sm-6 col-xs-6 ">
-                            <h3 class="text-right text-info m-t-20"><a href="{{ path('project_new') }}">Создать новый</a></h3>
+                            <h3 class="text-right text-info m-t-20"><a href="{{ path('andy_diffuse_river_homepage') }}">Создать новый</a></h3>
                         </div>
                     </div>
                 </div>

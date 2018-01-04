@@ -1,5 +1,17 @@
 {% extends 'base.html.twig' %}
 
+{% block title %}
+    {{ project.name }}
+{% endblock %}
+
+{% block page_title %}
+    {{ project.name }}
+{% endblock %}
+
+{% block breadcrumb %}
+    <li>{{ project.name }}</li>
+{% endblock %}
+
 {% block body %}
     <!-- .row -->
     <div class="row">

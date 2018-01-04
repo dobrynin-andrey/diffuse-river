@@ -9,7 +9,7 @@
     <meta name="author" content="">
     <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
     {#<link rel="icon" type="image/png" sizes="16x16" href="{{ asset('plugins/images/favicon.png') }}">#}
-    <title>{% block title %}Welcome!{% endblock %}</title>
+    <title>Diffuse River | {% block title %}Рабочий стол{% endblock %}</title>
 {% block stylesheets %}
     <!-- Bootstrap Core CSS -->
     <link href="{{ asset('css/bootstrap/dist/css/bootstrap.min.css') }}" rel="stylesheet">
@@ -35,6 +35,7 @@
     <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
     <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
+{% block head_scripts %}{% endblock %}
 </head>
 
     <body class="fix-header">
@@ -153,11 +154,29 @@
             <!-- Page Content -->
             <!-- ============================================================== -->
             <div id="page-wrapper">
-        {% block body %}{% endblock %}
+                <div class="container-fluid">
+                    <div class="row bg-title">
+                        <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
+                            <h4 class="page-title">{% block page_title %}{% endblock %}</h4> </div>
+                        <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
+                            {% if app.request.requestUri != '/' %}
+                             <a href="{{ path('andy_diffuse_river_homepage') }}" class="btn btn-success pull-right m-l-20 hidden-xs hidden-sm waves-effect waves-light">Создать новый проект</a>
+                            {% endif %}
+                             <ol class="breadcrumb">
+                                 {% if app.request.requestUri != '/' %}
+                                     <li><a href="{{ path('andy_diffuse_river_homepage') }}">Рабочий стол</a></li>
+                                 {% endif %}
+                                 {% block breadcrumb %}{% endblock %}
+                             </ol>
+                        </div>
+                        <!-- /.col-lg-12 -->
+                    </div>
+            {% block body %}{% endblock %}
+                </div>
+            </div>
 
             <!-- /.container-fluid -->
             <footer class="footer text-center">2017 &#8211; {{ "now"|date("Y") }} &copy; Diffuse River Application by Andrey Dobrynin </footer>
-            </div>
         <!-- ============================================================== -->
         <!-- End Page Content -->
         <!-- ============================================================== -->
@@ -165,7 +184,6 @@
         <!-- ============================================================== -->
         <!-- End Wrapper -->
         <!-- ============================================================== -->
-        {% block javascripts %}
         <!-- ============================================================== -->
         <!-- All Jquery -->
         <!-- ============================================================== -->
@@ -190,12 +208,9 @@
         <script src="{{ asset('js/custom.min.js') }}"></script>
         <script src="{{ asset('js/dashboard1.js') }}"></script>
         <script src="{{ asset('plugins/bower_components/toast-master/js/jquery.toast.js') }}"></script>
-        {#<script src="http://maps.google.com/maps/api/js?sensor=true"></script>#}
-        {#<script src="{{ asset('plugins/bower_components/gmaps/gmaps.min.js') }}"></script>#}
-        {#<script src="{{ asset('plugins/bower_components/gmaps/jquery.gmaps.js') }}"></script>#}
         <!--Style Switcher -->
         {#<script src="{{ asset('plugins/bower_components/styleswitcher/jQuery.style.switcher.js') }}"></script>#}
-        {% endblock %}
+        {% block javascripts %}{% endblock %}
     </body>
 
 </html>
