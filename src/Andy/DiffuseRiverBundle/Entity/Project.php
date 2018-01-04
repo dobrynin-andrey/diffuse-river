@@ -2,16 +2,28 @@
 
 namespace Andy\DiffuseRiverBundle\Entity;
 
+
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Project
  *
  * @ORM\Table(name="project")
  * @ORM\Entity(repositoryClass="Andy\DiffuseRiverBundle\Repository\ProjectRepository")
+ * @ORM\HasLifecycleCallbacks
  */
 class Project
 {
+
+    // В конструкторе вызываем функции по добавлению даты создания и обновления
+    // Добавил @ORM\HasLifecycleCallbacks в описание класса, чтобы можно было менять дату при обновлении изменений
+    public function __construct()
+    {
+        $this->setCreatedDate(new \DateTime());
+        $this->setUpdatedDate(new \DateTime());
+    }
+
     /**
      * @var int
      *
@@ -25,6 +37,14 @@ class Project
      * @var string
      *
      * @ORM\Column(name="name", type="string", length=500)
+     *
+     * @Assert\NotBlank()
+     * @Assert\Length(
+     *     min="4",
+     *     max="500",
+     *     minMessage="Название не должно быть менее 4 символов.",
+     *     maxMessage="Название не должно быть более 500 символов."
+     * )
      */
     private $name;
 
@@ -123,6 +143,15 @@ class Project
     public function getUpdatedDate()
     {
         return $this->updatedDate;
+    }
+
+    /**
+     * @ORM\PreUpdate
+     */
+    // Функция работает вместе с @ORM\HasLifecycleCallbacks
+    public function setUpdatedValue()
+    {
+        $this->setUpdatedDate(new \DateTime());
     }
 }
 

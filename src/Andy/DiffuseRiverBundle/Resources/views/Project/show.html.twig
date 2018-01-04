@@ -1,0 +1,28 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+
+    <div class="row">
+        <div class="col-md-12 col-lg-12 col-sm-12">
+            <div class="white-box">
+                <div class="row sales-report">
+                    <div class="col-md-6 col-sm-6 col-xs-12">
+                        <h1>{{ project.name }}</h1>
+
+                    </div>
+                    <div class="col-md-6 col-sm-6 col-xs-12 ">
+                        <div class="text-right text-info m-t-10">
+                            <a href="{{ path('project_edit', { 'id': project.id }) }}">Изменить</a>
+                            <br>
+                            <a href="{{ path('andy_diffuse_river_homepage') }}">Назад к списку</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="m-t-20">
+                    <p>Дата создания:  {% if project.createdDate %}{{ project.createdDate|date('d.m.Y H:i') }}{% endif %}</p>
+                    <p>Дата обновления:  {% if project.updatedDate %}{{ project.updatedDate|date('d.m.Y H:i') }}{% endif %}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

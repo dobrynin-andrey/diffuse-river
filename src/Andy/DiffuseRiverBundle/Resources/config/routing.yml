@@ -1,6 +1,6 @@
 andy_diffuse_river_project:
     resource: "@AndyDiffuseRiverBundle/Resources/config/routing/project.yml"
-    prefix:   /project
+    prefix:   /
 
 andy_diffuse_river_homepage:
     path:     /

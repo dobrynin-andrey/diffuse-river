@@ -1,0 +1,29 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <!-- .row -->
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="white-box">
+                <h3 class="box-title m-b-0">Изменить проект: </h3><h2>{{ project.name }}</h2>
+                <p class="text-muted m-b-30 font-13">Введите новое название проекта</p>
+                {{ form_start(edit_form, {attr: {class: 'form-horizontal'} })  }}
+                <div class="form-group">
+                    <label class="col-md-12">{{ form_label(edit_form.name) }}</label>
+                    {{ form_errors(edit_form.name) }}
+                    <div class="col-md-12">
+                        {{ form_widget(edit_form.name) }}
+                    </div>
+                </div>
+                <button type="submit" class="btn waves-effect waves-light btn-info">Изменить</button>
+                {{ form_end(edit_form) }}
+                <br>
+                {{ form_start(delete_form) }}
+                <button type="submit" class="btn waves-effect waves-light btn-danger">Удалить</button>
+                {{ form_end(delete_form) }}
+                <br>
+                <a href="{{ path('andy_diffuse_river_homepage') }}">Назад к списку</a>
+            </div>
+        </div>
+    </div>
+{% endblock %}

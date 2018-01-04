@@ -5,12 +5,12 @@
     <div class="container-fluid">
         <div class="row bg-title">
             <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
-                <h4 class="page-title">Dashboard</h4> </div>
+                <h4 class="page-title">Рабочий стол</h4> </div>
             <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
-                <a href="https://wrappixel.com/templates/ampleadmin/" target="_blank" class="btn btn-danger pull-right m-l-20 hidden-xs hidden-sm waves-effect waves-light">Upgrade to Pro</a>
+               {# <a href="{{ path('project_new') }}" class="btn btn-danger pull-right m-l-20 hidden-xs hidden-sm waves-effect waves-light">Создать новый проект</a>
                 <ol class="breadcrumb">
-                    <li><a href="/">Dashboard</a></li>
-                </ol>
+                    <li><a href="/">Рабочий стол</a></li>
+                </ol>#}
             </div>
             <!-- /.col-lg-12 -->
         </div>
@@ -74,53 +74,98 @@
         </div>#}
 
 
-
-
-        <h1>Projects list</h1>
-
-        <table>
-            <thead>
-            <tr>
-                <th>Id</th>
-                <th>Name</th>
-                <th>Createddate</th>
-                <th>Updateddate</th>
-                <th>Actions</th>
-            </tr>
-            </thead>
-            <tbody>
-            {% for project in projects %}
-                <tr>
-                    <td><a href="{{ path('project_show', { 'id': project.id }) }}">{{ project.id }}</a></td>
-                    <td>{{ project.name }}</td>
-                    <td>{% if project.createdDate %}{{ project.createdDate|date('Y-m-d H:i:s') }}{% endif %}</td>
-                    <td>{% if project.updatedDate %}{{ project.updatedDate|date('Y-m-d H:i:s') }}{% endif %}</td>
-                    <td>
-                        <ul>
-                            <li>
-                                <a href="{{ path('project_show', { 'id': project.id }) }}">show</a>
-                            </li>
-                            <li>
-                                <a href="{{ path('project_edit', { 'id': project.id }) }}">edit</a>
-                            </li>
-                        </ul>
-                    </td>
-                </tr>
-            {% endfor %}
-            </tbody>
-        </table>
-
-        <ul>
-            <li>
-                <a href="{{ path('project_new') }}">Create a new project</a>
-            </li>
-        </ul>
-
-
-
-
-
-        <!-- row -->
+    <!-- .row -->
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="white-box">
+                <h3 class="box-title m-b-0">Создать новый проект</h3>
+                <p class="text-muted m-b-30 font-13">Введите название проекта</p>
+                {{ form_start(form, {attr: {class: 'form-horizontal'} })  }}
+                <div class="form-group">
+                    <label class="col-md-12">{{ form_label(form.name) }}</label>
+                    {{ form_errors(form.name) }}
+                    <div class="col-md-12">
+                        {{ form_widget(form.name) }}
+                    </div>
+                </div>
+                <button type="submit" class="btn waves-effect waves-light btn-info">Создать</button>
+                {{ form_end(form) }}
+            </div>
+        </div>
+    </div>
+    {% if projects | length > 0 %}
+        <div class="row">
+            <div class="col-md-12 col-lg-12 col-sm-12">
+                <div class="white-box">
+                    <h2>Проекты</h2>
+                    {#<div class="row sales-report">
+                        <div class="col-md-6 col-sm-6 col-xs-6">
+                        </div>
+                        <div class="col-md-6 col-sm-6 col-xs-6 ">
+                            <h3 class="text-right text-info m-t-20"><a href="{{ path('project_new') }}">Создать новый</a></h3>
+                        </div>
+                    </div>#}
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Название</th>
+                                    <th>Дата создания</th>
+                                    <th>Дата обновления</th>
+                                    <th>Действия</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            {% for project in projects %}
+                                <tr>
+                                    <td>
+                                        {{ loop.index }}
+                                    </td>
+                                    <td class="txt-oflo">
+                                        <a href="{{ path('project_show', { 'id': project.id }) }}">
+                                            {{ project.name }}
+                                        </a>
+                                    </td>
+                                    <td class="txt-oflo">
+                                        {% if project.createdDate %}{{ project.createdDate|date('d.m.Y H:i') }}{% endif %}
+                                    </td>
+                                    <td class="txt-oflo">
+                                        {% if project.updatedDate %}{{ project.updatedDate|date('d.m.Y H:i') }}{% endif %}
+                                    </td>
+                                    <td>
+                                        <a href="{{ path('project_show', { 'id': project.id }) }}" data-toggle="tooltip" data-original-title="Показать">
+                                            <i class="fa fa-chain fa-fw" aria-hidden="true"></i>
+                                            </a> |&nbsp;
+                                        <a href="{{ path('project_edit', { 'id': project.id }) }}" data-toggle="tooltip" data-original-title="Изменить">
+                                            <i class="fa fa-pencil text-inverse m-r-10"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% else %}
+        <div class="row">
+            <div class="col-md-12 col-lg-12 col-sm-12">
+                <div class="white-box">
+                    <div class="row sales-report">
+                        <div class="col-md-6 col-sm-6 col-xs-6">
+                            <h1>Проектов нет!</h1>
+                        </div>
+                        <div class="col-md-6 col-sm-6 col-xs-6 ">
+                            <h3 class="text-right text-info m-t-20"><a href="{{ path('project_new') }}">Создать новый</a></h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+        {# <!-- row -->
         <div class="row">
             <div class="col-sm-12">
                 <div class="white-box">
@@ -128,12 +173,15 @@
                     <div id="gmaps-simple" class="gmaps"></div>
                 </div>
             </div>
-        </div>
+        </div>#}
+
+
+
 
         <!-- ============================================================== -->
         <!-- Recent comment, table & feed widgets -->
         <!-- ============================================================== -->
-        <div class="row">
+        {#<div class="row">
             <div class="col-md-12 col-lg-12 col-sm-12">
                 <div class="white-box">
                     <div class="col-md-3 col-sm-4 col-xs-6 pull-right">
@@ -221,6 +269,6 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div>#}
 
 {% endblock %}

@@ -12,44 +12,6 @@ use Symfony\Component\HttpFoundation\Request;
  */
 class ProjectController extends Controller
 {
-    /**
-     * Lists all project entities.
-     *
-     */
-    public function indexAction()
-    {
-        $em = $this->getDoctrine()->getManager();
-
-        $projects = $em->getRepository('AndyDiffuseRiverBundle:Project')->findAll();
-
-        return $this->render('project/index.html.twig', array(
-            'projects' => $projects,
-        ));
-    }
-
-    /**
-     * Creates a new project entity.
-     *
-     */
-    public function newAction(Request $request)
-    {
-        $project = new Project();
-        $form = $this->createForm('Andy\DiffuseRiverBundle\Form\ProjectType', $project);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($project);
-            $em->flush();
-
-            return $this->redirectToRoute('project_show', array('id' => $project->getId()));
-        }
-
-        return $this->render('project/new.html.twig', array(
-            'project' => $project,
-            'form' => $form->createView(),
-        ));
-    }
 
     /**
      * Finds and displays a project entity.
@@ -59,7 +21,7 @@ class ProjectController extends Controller
     {
         $deleteForm = $this->createDeleteForm($project);
 
-        return $this->render('project/show.html.twig', array(
+        return $this->render('@AndyDiffuseRiver/Project/show.html.twig', array(
             'project' => $project,
             'delete_form' => $deleteForm->createView(),
         ));
@@ -81,7 +43,7 @@ class ProjectController extends Controller
             return $this->redirectToRoute('project_edit', array('id' => $project->getId()));
         }
 
-        return $this->render('project/edit.html.twig', array(
+        return $this->render('@AndyDiffuseRiver/Project/edit.html.twig', array(
             'project' => $project,
             'edit_form' => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
@@ -103,7 +65,7 @@ class ProjectController extends Controller
             $em->flush();
         }
 
-        return $this->redirectToRoute('project_index');
+        return $this->redirectToRoute('andy_diffuse_river_homepage');
     }
 
     /**
