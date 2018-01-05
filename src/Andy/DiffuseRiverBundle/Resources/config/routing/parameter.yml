@@ -3,11 +3,6 @@ parameter_index:
     defaults: { _controller: "AndyDiffuseRiverBundle:Parameter:index" }
     methods:  GET
 
-parameter_show:
-    path:     /{id}/show
-    defaults: { _controller: "AndyDiffuseRiverBundle:Parameter:show" }
-    methods:  GET
-
 parameter_new:
     path:     /new
     defaults: { _controller: "AndyDiffuseRiverBundle:Parameter:new" }
@@ -21,4 +16,9 @@ parameter_edit:
 parameter_delete:
     path:     /{id}/delete
     defaults: { _controller: "AndyDiffuseRiverBundle:Parameter:delete" }
-    methods:  DELETE
+    methods:  [GET, DELETE]
+
+parameter_delete_all:
+    path:     /delete_all
+    defaults: { _controller: "AndyDiffuseRiverBundle:Parameter:delete_all" }
+    methods:  [GET]

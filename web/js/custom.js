@@ -9,7 +9,7 @@
 
      $(function () {
          $(".preloader").fadeOut();
-         $('#side-menu').metisMenu(); 
+         $('#side-menu').metisMenu();
      });
 
      /* ===== Theme Settings ===== */
@@ -44,8 +44,11 @@
                  if (width < 1170) {
                      body.addClass('content-wrapper');
                      $(".sidebar-nav, .slimScrollDiv").css("overflow-x", "visible").parent().css("overflow", "visible");
+                     $(".sidebar-head").css("display","block");
+                     $('.navbar-static-top').css('z-index', '1000');
                  } else {
                      body.removeClass('content-wrapper');
+                     $('.navbar-static-top').css('z-index', '1010');
                  }
 
                  height = height - topOffset;

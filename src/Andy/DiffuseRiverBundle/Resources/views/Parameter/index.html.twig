@@ -1,43 +1,88 @@
 {% extends 'base.html.twig' %}
 
+{% block title %}
+    Параметры
+{% endblock %}
+
+{% block page_title %}
+    Параметры
+{% endblock %}
+
+{% block breadcrumb %}
+   <li>Параметры</li>
+{% endblock %}
+
 {% block body %}
-    <h1>Parameters list</h1>
 
-    <table>
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Name</th>
-                <th>Code</th>
-                <th>Edizm</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for parameter in parameters %}
-            <tr>
-                <td><a href="{{ path('parameter_show', { 'id': parameter.id }) }}">{{ parameter.id }}</a></td>
-                <td>{{ parameter.name }}</td>
-                <td>{{ parameter.code }}</td>
-                <td>{{ parameter.edIzm }}</td>
-                <td>
-                    <ul>
-                        <li>
-                            <a href="{{ path('parameter_show', { 'id': parameter.id }) }}">show</a>
-                        </li>
-                        <li>
-                            <a href="{{ path('parameter_edit', { 'id': parameter.id }) }}">edit</a>
-                        </li>
-                    </ul>
-                </td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
-
-    <ul>
-        <li>
-            <a href="{{ path('parameter_new') }}">Create a new parameter</a>
-        </li>
-    </ul>
+    {% if parameters | length > 0 %}
+        <div class="row">
+            <div class="col-md-12 col-lg-12 col-sm-12">
+                <div class="white-box">
+                    <div class="row sales-report">
+                        <div class="col-md-6 col-sm-6 col-xs-6">
+                            <h1>Параметры</h1>
+                        </div>
+                        <div class="col-md-6 col-sm-6 col-xs-6 text-right">
+                            <a class="di m-t-20 btn btn-success" href="{{ path('parameter_new') }}">Создать новый параметр</a>
+                            <a class="di m-t-20 btn btn-danger m-l-10" href="{{ path('parameter_delete_all') }}">Удалить все</a>
+                        </div>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Название</th>
+                                <th>Код</th>
+                                <th>Единицы измерения</th>
+                                <th>Действия</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for parameter in parameters %}
+                                <tr>
+                                    <td>
+                                        {{ loop.index }}
+                                    </td>
+                                    <td class="txt-oflo">
+                                        {{ parameter.name }}
+                                    </td>
+                                    <td class="txt-oflo">
+                                        {{ parameter.code }}
+                                    </td>
+                                    <td class="txt-oflo">
+                                        {{ parameter.edIzm }}
+                                    </td>
+                                    <td>
+                                        <a href="{{ path('parameter_edit', { 'id': parameter.id }) }}" data-toggle="tooltip" data-original-title="Изменить">
+                                            <i class="fa fa-pencil text-inverse m-r-10"></i>
+                                        </a>
+                                        <a href="{{ path('parameter_delete', { 'id': parameter.id }) }}" data-toggle="tooltip" data-original-title="Удалить">
+                                            <i class="fa fa-close text-danger"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% else %}
+        <div class="row">
+            <div class="col-md-12 col-lg-12 col-sm-12">
+                <div class="white-box">
+                    <div class="row sales-report">
+                        <div class="col-md-6 col-sm-6 col-xs-6">
+                            <h1>Параметров нет!</h1>
+                        </div>
+                        <div class="col-md-6 col-sm-6 col-xs-6 ">
+                            <h3 class="text-right text-info m-t-20"><a href="{{ path('parameter_new') }}">Добавить новый</a></h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endif %}
 {% endblock %}

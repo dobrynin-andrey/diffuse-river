@@ -1,6 +1,8 @@
 <?php
 
 namespace Andy\DiffuseRiverBundle\Entity;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Validator\Constraints as Assert;
 
 use Doctrine\ORM\Mapping as ORM;
 
@@ -9,6 +11,7 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @ORM\Table(name="parameter")
  * @ORM\Entity(repositoryClass="Andy\DiffuseRiverBundle\Repository\ParameterRepository")
+ * @UniqueEntity("code")
  */
 class Parameter
 {
@@ -25,6 +28,16 @@ class Parameter
      * @var string
      *
      * @ORM\Column(name="name", type="string", length=255)
+     *
+     * @Assert\NotBlank(
+     *     message="Название не должно быть пустым."
+     * )
+     * @Assert\Length(
+     *     min="3",
+     *     max="255",
+     *     minMessage="Название не должно быть менее 3 символов.",
+     *     maxMessage="Название не должно быть более 255 символов."
+     * )
      */
     private $name;
 
@@ -32,6 +45,17 @@ class Parameter
      * @var string
      *
      * @ORM\Column(name="code", type="string", length=255, unique=true)
+     *
+     * @Assert\NotBlank(
+     *     message="Поле код не должно быть пустым."
+     * )
+     * @Assert\Length(
+     *     min="2",
+     *     max="255",
+     *     minMessage="Поле код не должно быть менее 2 символов.",
+     *     maxMessage="Поле код не должно быть более 255 символов."
+     * )
+     *
      */
     private $code;
 
@@ -39,6 +63,17 @@ class Parameter
      * @var string
      *
      * @ORM\Column(name="ed_izm", type="string", length=255)
+     *
+     * @Assert\NotBlank(
+     *     message="Поле единицы измерения не должно быть пустым."
+     * )
+     * @Assert\Length(
+     *     min="2",
+     *     max="255",
+     *     minMessage="Поле единицы измерения не должно быть менее 2 символов.",
+     *     maxMessage="Поле единицы измерения не должно быть более 255 символов."
+     * )
+     *
      */
     private $edIzm;
 

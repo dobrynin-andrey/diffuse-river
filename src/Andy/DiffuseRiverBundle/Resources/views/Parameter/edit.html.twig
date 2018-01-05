@@ -1,21 +1,58 @@
 {% extends 'base.html.twig' %}
 
+{% block title %}
+    Параметры | {{ parameter.name }}
+{% endblock %}
+
+{% block page_title %}
+    {{ parameter.name }}
+{% endblock %}
+
+{% block breadcrumb %}
+<li><a href="{{ path('parameter_index') }}">Параметры</a><li>
+    {{ parameter.name }}
+{% endblock %}
+
 {% block body %}
-    <h1>Parameter edit</h1>
 
-    {{ form_start(edit_form) }}
-        {{ form_widget(edit_form) }}
-        <input type="submit" value="Edit" />
-    {{ form_end(edit_form) }}
+    <!-- .row -->
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="white-box">
+                <h3 class="box-title m-b-0">Изменить параметр</h3>
+                <p class="text-muted m-b-30 font-13">Укажите новые значения параметра</p>
+                {{ form_start(edit_form, {attr: {class: 'form-horizontal'} })  }}
+                <div class="form-group">
+                    <label for="{{ edit_form.name.vars.id }}" class="col-md-12">{{ form_label(edit_form.name) }}</label>
+                    {{ form_errors(edit_form.name) }}
+                    <div class="col-md-12">
+                        {{ form_widget(edit_form.name) }}
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="{{ edit_form.code.vars.id }}" class="col-md-12">{{ form_label(edit_form.code) }}</label>
+                    {{ form_errors(edit_form.code) }}
+                    <div class="col-md-12">
+                        {{ form_widget(edit_form.code) }}
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="{{ edit_form.edIzm.vars.id }}" class="col-md-12">{{ form_label(edit_form.edIzm) }}</label>
+                    {{ form_errors(edit_form.edIzm) }}
+                    <div class="col-md-12">
+                        {{ form_widget(edit_form.edIzm) }}
+                    </div>
+                </div>
 
-    <ul>
-        <li>
-            <a href="{{ path('parameter_index') }}">Back to the list</a>
-        </li>
-        <li>
-            {{ form_start(delete_form) }}
-                <input type="submit" value="Delete">
-            {{ form_end(delete_form) }}
-        </li>
-    </ul>
+                <button type="submit" class="btn waves-effect waves-light btn-info">Изменить</button>
+                {{ form_end(edit_form) }}
+                <br>
+                {{ form_start(delete_form) }}
+                <button type="submit" class="btn waves-effect waves-light btn-danger">Удалить</button>
+                {{ form_end(delete_form) }}
+                <br>
+                <a href="{{ path('parameter_index') }}">Назад к списку</a>
+            </div>
+        </div>
+    </div>
 {% endblock %}
