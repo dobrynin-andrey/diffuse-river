@@ -5,10 +5,16 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="">
-    <meta name="author" content="">
+    <meta name="description" content="Diffuse River Application - Информационно-пользовательская система оценки диффузной нагрузки на водотоки речных бассейнов.">
+    <meta name="author" content="Андрей Добрынин">
+    <meta property="og:locale" content="ru_RU"/>
+    <meta property="og:type" content="application"/>
+    <meta property="og:title" content="Diffuse River Application"/>
+    <meta property="og:description" content="Diffuse River Application - Информационно-пользовательская система оценки диффузной нагрузки на водотоки речных бассейнов."/>
+    <meta property="og:image" content="http://app-matrix.tk/logo-gor-og.jpg"/>
+    <meta property="og:site_name" content="Информационно-пользовательская система - Diffuse River Application"/>
     <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
-    <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('plugins/images/admin-logo.png') }}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('plugins/images/admin-logo-dark.png') }}">
     <title>Diffuse River | {% block title %}Рабочий стол{% endblock %}</title>
 {% block stylesheets %}
     <!-- Bootstrap Core CSS -->
@@ -62,8 +68,9 @@
                             <!-- Logo icon image, you can use font-icon also --><b>
                                 <!--This is dark logo icon--><img src="{{ asset('plugins/images/admin-logo.png') }}" alt="home" class="dark-logo" /><!--This is light logo icon--><img src="{{ asset('plugins/images/admin-logo-dark.png') }}" alt="home" class="light-logo" />
                             </b>
-                            <!-- Logo text image you can use text also --><span class="hidden-xs">
-                        <!--This is dark logo text--><img src="{{ asset('plugins/images/admin-text.png') }}" alt="home" class="dark-logo" /><!--This is light logo text--><img src="{{ asset('plugins/images/admin-text-dark.png') }}" alt="home" class="light-logo" />
+                            <!-- Logo text image you can use text also --><span class="hidden-xs" style="width: 139px; height: 24px; font-size: 25px; color: #2f323e; text-transform: lowercase;">
+                        {#<!--This is dark logo text--><img src="{{ asset('plugins/images/admin-text.png') }}" alt="home" class="dark-logo" /><!--This is light logo text--><img src="{{ asset('plugins/images/admin-text-dark.png') }}" alt="home" class="light-logo" />#}
+                            <span style="font-weight: 700">diffuse</span><span>river</span>
                      </span> </a>
                     </div>
                     <!-- /Logo -->
@@ -225,7 +232,7 @@
         <!--Style Switcher -->
         {#<script src="{{ asset('plugins/bower_components/styleswitcher/jQuery.style.switcher.js') }}"></script>#}
         {% block javascripts %}{% endblock %}
-        <!-- Yandex.Metrika counter -->
+<!-- Yandex.Metrika counter -->
         <script type="text/javascript" >
             (function (d, w, c) {
                 (w[c] = w[c] || []).push(function() {
@@ -253,7 +260,7 @@
             })(document, window, "yandex_metrika_callbacks");
         </script>
         <noscript><div><img src="https://mc.yandex.ru/watch/47219973" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
-        <!-- /Yandex.Metrika counter -->
+<!-- /Yandex.Metrika counter -->
     </body>
 
 </html>
