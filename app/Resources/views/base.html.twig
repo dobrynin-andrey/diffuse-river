@@ -8,7 +8,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
     <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
-    {#<link rel="icon" type="image/png" sizes="16x16" href="{{ asset('plugins/images/favicon.png') }}">#}
+    <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('plugins/images/admin-logo.png') }}">
     <title>Diffuse River | {% block title %}Рабочий стол{% endblock %}</title>
 {% block stylesheets %}
     <!-- Bootstrap Core CSS -->
@@ -110,20 +110,18 @@
                     <div class="sidebar-head">
                         <h3 style="cursor: pointer"><span class="fa-fw open-close"><i class="ti-close ti-menu"></i></span> <span class="hide-menu open-close">Меню</span></h3>
                     </div>
+                    {% set url = app.request.requestUri | split('/') %}
                     <ul class="nav" id="side-menu">
                         <li style="padding: 70px 0 0;">
-                            <a href="{{ path('andy_diffuse_river_homepage') }}" class="waves-effect {% if app.request.requestUri == path('andy_diffuse_river_homepage') %}active{% endif %}">
+                            <a href="{{ path('andy_diffuse_river_homepage') }}" class="waves-effect {% if app.request.requestUri == path('andy_diffuse_river_homepage') or 'project' in url %}active{% endif %}">
                                 <i class="fa fa-desktop fa-fw" aria-hidden="true"></i>Рабочий стол
                             </a>
                         </li>
                         <li>
-                            <a href="{{ path('parameter_index') }}" class="waves-effect {% if app.request.requestUri == path('parameter_index') %}active{% endif %}">
+                            <a href="{{ path('parameter_index') }}" class="waves-effect {% if app.request.requestUri == path('parameter_index') or 'parameter' in url %}active{% endif %}">
                                 <i class="fa fa-cog fa-fw" aria-hidden="true"></i>Параметры
                             </a>
                         </li>
-
-
-
 
                         {#
 
@@ -227,6 +225,35 @@
         <!--Style Switcher -->
         {#<script src="{{ asset('plugins/bower_components/styleswitcher/jQuery.style.switcher.js') }}"></script>#}
         {% block javascripts %}{% endblock %}
+        <!-- Yandex.Metrika counter -->
+        <script type="text/javascript" >
+            (function (d, w, c) {
+                (w[c] = w[c] || []).push(function() {
+                    try {
+                        w.yaCounter47219973 = new Ya.Metrika({
+                            id:47219973,
+                            clickmap:true,
+                            trackLinks:true,
+                            accurateTrackBounce:true,
+                            webvisor:true
+                        });
+                    } catch(e) { }
+                });
+
+                var n = d.getElementsByTagName("script")[0],
+                    s = d.createElement("script"),
+                    f = function () { n.parentNode.insertBefore(s, n); };
+                s.type = "text/javascript";
+                s.async = true;
+                s.src = "https://mc.yandex.ru/metrika/watch.js";
+
+                if (w.opera == "[object Opera]") {
+                    d.addEventListener("DOMContentLoaded", f, false);
+                } else { f(); }
+            })(document, window, "yandex_metrika_callbacks");
+        </script>
+        <noscript><div><img src="https://mc.yandex.ru/watch/47219973" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
+        <!-- /Yandex.Metrika counter -->
     </body>
 
 </html>
