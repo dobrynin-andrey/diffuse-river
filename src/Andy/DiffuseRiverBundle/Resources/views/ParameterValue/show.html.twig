@@ -1,20 +1,18 @@
 {% extends 'base.html.twig' %}
 
-{% block head_scripts %}
-    <script src="https://api-maps.yandex.ru/2.1/?lang=ru_RU" type="text/javascript"></script>
-{% endblock %}
 
 {% block title %}
-    {{ project.name }} | {{ point.name }}
+    {{ project.name }} | {{ point.name }} | {{ parameter.name }}
 {% endblock %}
 
 {% block page_title %}
-    {{ point.name }}
+    {{ point.name }} > {{ parameter.name }}
 {% endblock %}
 
 {% block breadcrumb %}
 <li><a href="{{ path('project_show', { 'id': project.id }) }}">{{ project.name }}</a><li>
-    {{ point.name }}
+<li><a href="{{ path('point_show', { 'project': project.id, 'id': point.id  }) }}">{{ point.name }}</a><li>
+    {{ parameter.name }}
     {% endblock %}
 
     {% block body %}
@@ -24,90 +22,30 @@
                 <div class="white-box">
                     <div class="row sales-report">
                         <div class="col-md-6 col-sm-6 col-xs-12">
-                            <h1>Точка: {{ point.name }}</h1>
+                            <h1>Параметр: {{ parameter.name }}, точки: {{ point.name }}</h1>
 
                         </div>
                         <div class="col-md-6 col-sm-6 col-xs-12 ">
                             <div class="text-right text-info m-t-15">
-                                <h5><a href="{{ path('point_edit', { 'project': project.id, 'id': point.id }) }}">Изменить</a></h5>
-                                <h5><a href="{{ path('project_show', { 'id': project.id }) }}">Назад к списку</a></h5>
+                                {#<h5><a href="{{ path('point_edit', { 'project': project.id, 'id': point.id }) }}">Изменить</a></h5>#}
+                                <h5><a href="{{ path('point_show', { 'project': project.id, 'id': point.id  }) }}">Назад к списку</a></h5>
                             </div>
                         </div>
                     </div>
                     <div class="m-t-20">
-                        <p>Дата создания:  {% if point.createdDate %}{{ point.createdDate|date('d.m.Y H:i') }}{% endif %}</p>
-                        <p>Дата обновления:  {% if point.updatedDate %}{{ point.updatedDate|date('d.m.Y H:i') }}{% endif %}</p>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- row -->
-        <div class="row">
-            <div class="col-sm-12">
-                <div class="white-box">
-                    <h3 class="box-title">Карта</h3>
-                    <div id="map" style="width: 100%; height: 600px"></div>
 
-                </div>
-            </div>
-        </div>
-
-        {# Точка проекта #}
-
-        <!-- .row -->
-        <div class="row">
-            <div class="col-sm-12">
-                <div class="white-box">
-                    <h3 class="box-title m-b-0">Импоритровать данные точки</h3>
-                    <p class="text-muted m-b-30 font-13">Загрузите данные точки</p>
-
-                    {% for label, messages in app.session.flashbag.all %}
-                        {% for message in messages %}
-                            {% if label == 'success' %}
-                                <p class="text-success m-b-5 font-13">{{ message }}</p>
-                            {% else %}
-                                <p class="text-danger m-b-5 font-13">{{ message }}</p>
-                            {% endif %}
-                        {% endfor %}
-                    {% endfor %}
-
-                    {{ form_start(form_import, {attr: {class: 'form-horizontal'} })  }}
-
-                    <div class="form-group">
-                        <label for="{{ form_import.file.vars.id }}" class="col-md-12">{{ form_label(form_import.file) }}</label>
-                        {{ form_errors(form_import.file) }}
-                        <div class="col-sm-12">
-                            <div class="fileinput fileinput-new input-group" data-provides="fileinput">
-                                <div class="form-control" data-trigger="fileinput">
-                                    <i class="glyphicon glyphicon-file fileinput-exists"></i>
-                                    <span class="fileinput-filename"></span>
-                                </div>
-                                <span class="input-group-addon btn btn-default btn-file">
-                                <span class="fileinput-new">Выбрать файл</span>
-                                <span class="fileinput-exists">Изменить</span>
-                                    {{ form_widget(form_import.file) }}
-                            </span>
-                                <a href="#" class="input-group-addon btn btn-default fileinput-exists" data-dismiss="fileinput">Удалить</a>
-                            </div>
-                        </div>
-                    </div>
-
-                    <button type="submit" class="btn waves-effect waves-light btn-success">Импортировать</button>
-                    {{ form_end(form_import) }}
-                    <br>
-                    <a href="{{ path('parameter_index') }}">Назад к списку</a>
-
-        </div>
-
-        {% if parameters | length > 0 %}
+        {% if arParameter | length > 0 %}
         <div class="row">
             <div class="col-md-12 col-lg-12 col-sm-12">
                 <div class="white-box">
-                    <div class="row sales-report">
+                    <div class="row">
                         <div class="col-md-6 col-sm-6 col-xs-6">
-                            <h1>Параметры текущей точки</h1>
-                            <p>Щелкните на параметр, чтобы посмотреть его данные</p>
+                            <h3>Значения параметра текущей точки</h3>
                         </div>
                         <div class="col-md-6 col-sm-6 col-xs-6 text-right">
                             <a class="di m-t-20 btn btn-success" href="{{ path('parameter_new') }}">Создать новый параметр</a>
@@ -126,19 +64,19 @@
                             </tr>
                             </thead>
                             <tbody>
-                            {% for parameter in parameters %}
+                            {% for itemParam in arParameter %}
                                 <tr>
                                     <td>
                                         {{ loop.index }}
                                     </td>
                                     <td class="txt-oflo">
-                                       <a href="{{ path('parameter_value_show', {'project': project.id, 'id' : point.id, 'parameter' : parameter.id}) }}">{{ parameter.name }}</a>
-                                    </td>
-                                    <td class="txt-oflo">
-                                        {{ parameter.code }}
+                                      {{ parameter.name }}
                                     </td>
                                     <td class="txt-oflo">
                                         {{ parameter.edIzm }}
+                                    </td>
+                                    <td class="txt-oflo">
+                                        {{ itemParam.value }}
                                     </td>
                                     <td>
                                         <a href="{{ path('parameter_edit', { 'id': parameter.id }) }}" data-toggle="tooltip" data-original-title="Изменить">
@@ -173,23 +111,4 @@
     {% endif %}
 
 
-
-
-
-        <script>
-            window.$editPoint = true;
-            window.$points = {
-                name: [],
-                coords: []
-            };
-
-            window.$points.name.push('{{ point.name }}');
-            window.$points.coords.push('{{ point.coords }}');
-
-        </script>
-
-    {% endblock %}
-
-    {% block javascripts %}
-        <script src="{{ asset('js/ymap.js') }}"></script>
-    {% endblock %}
+{% endblock %}

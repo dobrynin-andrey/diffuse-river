@@ -29,15 +29,12 @@ class ParameterValueController extends Controller
 
         $em = $this->getDoctrine()->getManager();
 
-        $arParameter = $em->getRepository('AndyDiffuseRiverBundle:ParamValue')->findBy(array(
-            'parameterId' => $parameter->getId()
-        ));
+        $arParameter = $em->getRepository('AndyDiffuseRiverBundle:ParamValue')->findBy(
+            array('parameterId' => $parameter->getId())
+        );
 
-        dump($parameter);
-        dump($arParameter);
-        die();
-
-        return $this->render('@AndyDiffuseRiver/Parameter/edit.html.twig', array(
+        return $this->render('@AndyDiffuseRiver/ParameterValue/show.html.twig', array(
+            'arParameter' => $arParameter,
             'parameter' => $parameter,
             'point' => $point,
             'project' => $project,
