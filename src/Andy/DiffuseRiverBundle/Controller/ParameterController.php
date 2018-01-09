@@ -74,7 +74,7 @@ class ParameterController extends Controller
                 $arImportData = $importCSV->parseParamCSV($pathFile);
 
                 // Выводим ошибки парсинга
-                if ($arImportData['errors']) {
+                if (!empty($arImportData['errors'])) {
                     foreach ($arImportData['errors']['values'] as $dataError) {
                         $this->addFlash('error', $dataError);
                     }

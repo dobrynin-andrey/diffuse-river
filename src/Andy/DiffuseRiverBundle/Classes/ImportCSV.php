@@ -37,7 +37,7 @@ class ImportCSV {
         $openFile = fopen($file, "r"); // Прочитать файл
         $arMD = array();  // Объявить массив значений
         $arrErrors = array(); // Объявить массив ошибок
-        $i = 1; // Счетчик строк
+        $i = 0; // Счетчик строк
         $arCoding = array("UTF-8", "ASCII", "Windows-1251", false);
         while ($data = fgetcsv($openFile, 10000, ";")) {
             if (count($data) > 3) {
@@ -50,8 +50,9 @@ class ImportCSV {
 
                 $coding = mb_detect_encoding($itemData);
                 if (!in_array($coding, $arCoding)) {
-                    $this->addFlash('error', "Кодировка не соответствует: UTF-8, ASCII или Windows-1251 - в строке №: " . $i . " в ячейке №: " . $k);
-                    $arrErrors["coding"][] = "Кодировка не соответствует: UTF-8, ASCII или Windows-1251 - в строке №: " . $i . " в ячейке №: " . $k;
+                    $arrErrors["values"][] = "Кодировка не соответствует: UTF-8, ASCII или Windows-1251 - в строке №: " . ($i+1) . " в ячейке №: " . ($k+1);
+                } else {
+                    $itemData = mb_convert_encoding($itemData, 'UTF-8', $coding);
                 }
 
                 /**
@@ -61,14 +62,14 @@ class ImportCSV {
                 if (empty($itemData)) {
                     switch ($k) {
                         case 0:
-                            $arrErrors["values"][] = "Предупреждение! Пустое значение - в строке №: " . $i . " в ячейке №: " . ($k+1) . ". Необходимо ввести название!";
+                            $arrErrors["values"][] = "Предупреждение! Пустое значение - в строке №: " . ($i+1) . " в ячейке №: " . ($k+1) . ". Необходимо ввести название!";
                             break;
                         case 1:
-                            $arrErrors["values"][] = 'Предупреждение! Пустое значение - в строке №: ' . $i . ' в ячейке №: ' . ($k+1) . '. Необходимо ввести уникальный код. Если оно неизвестно, то система автоматически проставит значение "-1", и параметры данного объекта не будет учавствовать в расчетах!';
+                            $arrErrors["values"][] = 'Предупреждение! Пустое значение - в строке №: ' . ($i+1) . ' в ячейке №: ' . ($k+1) . '. Необходимо ввести уникальный код. Если оно неизвестно, то система автоматически проставит значение "-1", и параметры данного объекта не будет учавствовать в расчетах!';
                             $itemData = -1;
                             break;
                         case 2:
-                            $arrErrors["values"][] = 'Предупреждение! Пустое значение - в строке №: ' . $i . ' в ячейке №: ' . ($k+1) . '. Необходимо ввести единицы измерения. Если оно неизвестно, то система автоматически проставит значение "-1", и параметры данного объекта не будет учавствовать в расчетах!';
+                            $arrErrors["values"][] = 'Предупреждение! Пустое значение - в строке №: ' . ($i+1) . ' в ячейке №: ' . ($k+1) . '. Необходимо ввести единицы измерения. Если оно неизвестно, то система автоматически проставит значение "-1", и параметры данного объекта не будет учавствовать в расчетах!';
                             $itemData = -1;
                             break;
                     }
@@ -80,20 +81,20 @@ class ImportCSV {
                  */
                 if ($itemData != '') {
                     if ($i == 0) {
-                        $arMD["head"][] = mb_convert_encoding($itemData, 'UTF-8', $coding );
+                        $arMD["head"][] = $itemData;
                     }
                 }
                 if ($itemData != '') {
                     if ($i > 0) {
                         if ($k == 0) {
-                            $arMD[$i-1]["parameter_name"] = mb_convert_encoding($itemData, 'UTF-8', $coding );
+                            $arMD[$i-1]["parameter_name"] = $itemData;
                         }
                         if ($k == 1) {
-                            $arMD[$i-1]["parameter_code"]= mb_convert_encoding($itemData, 'UTF-8', $coding );
+                            $arMD[$i-1]["parameter_code"]= $itemData;
                         }
 
                         if ($k == 2) {
-                            $arMD[$i-1]["parameter_ed_izm"] = mb_convert_encoding($itemData, 'UTF-8', $coding );
+                            $arMD[$i-1]["parameter_ed_izm"] = $itemData;
                         }
 
                     }
@@ -127,95 +128,84 @@ class ImportCSV {
 
     }
 
-    public function parseCSV ($file) {
+    public function parseCSV ($file, $arParameter) {
         $openFile = fopen($file, "r"); // Прочитать файл
         $arMD = array();  // Объявить массив значений
         $arrErrors = array(); // Объявить массив ошибок
         $i = 0; // Счетчик строк
         $arCoding = array("UTF-8", "ASCII", "Windows-1251", false);
         while ($data = fgetcsv($openFile, 10000, ";")) {
-            if (count($data) > 4) {
-                array_splice($data, 4);
-            }
             foreach ($data as $k => $itemData) {
+
+
                 /**
                  * Проверка на кодировку
                  */
+
                 $coding = mb_detect_encoding($itemData);
                 if (!in_array($coding, $arCoding)) {
-                    $this->addFlash('error', "Кодировка не соответствует: UTF-8, ASCII или Windows-1251 - в строке №: " . $i . " в ячейке №: " . $k);
-                    $arrErrors["coding"][] = "Кодировка не соответствует: UTF-8, ASCII или Windows-1251 - в строке №: " . $i . " в ячейке №: " . $k;
+                    $arrErrors["values"][] =  "Кодировка не соответствует: UTF-8, ASCII или Windows-1251 - в строке №: " . ($i+1) . " в ячейке №: " . ($k+1);
+                    continue;
+                } else {
+                    $itemData = mb_convert_encoding($itemData, 'UTF-8', $coding);
                 }
+
 
                 /**
                  *  Проверка значений
                  */
 
-/*
-                if (empty($itemData)) {
-                    switch ($k) {
-                        case 0:
-                            $arrErrors["values"][] = "Предупреждение! Пустое значение - в строке №: " . $i . " в ячейке №: " . ($k+1) . ". Необходимо ввести название!";
-                            break;
-                        case 1:
-                            $arrErrors["values"][] = 'Предупреждение! Пустое значение - в строке №: ' . $i . ' в ячейке №: ' . ($k+1) . '. Необходимо ввести значение года. Если оно неизвестно, то система автоматически проставит значение "-1", и параметры данного объекта не будет учавствовать в расчетах!';
-                            $itemData = -1;
-                            break;
-                        case 2:
-                            $arrErrors["values"][] = 'Предупреждение! Пустое значение - в строке №: ' . $i . ' в ячейке №: ' . ($k+1) . '. Необходимо ввести значение года.Если оно неизвестно, то система автоматически проставит значение "-1", и параметры данного объекта не будет учавствовать в расчетах!';
-                            $itemData = -1;
-                            break;
-                        case 3:
-                            $arrErrors["values"][] = 'Предупреждение! Пустое значение - в строке №: ' . $i . ' в ячейке №: ' . ($k+1) . '. Необходимо ввести тип объекта. "Муниципальный район" или "Городской округ"!';
-                            break;
-
-                    }
-                }*/
+                if (empty($itemData) && $itemData != 0) {
+                    $arrErrors["values"][] = 'Предупреждение! Пустое значение - в строке №: ' . ($i+1) . ' в ячейке №: ' . ($k+1) . '. Необходимо ввести значение. Если оно неизвестно, то система автоматически проставит значение "-1", и параметры данного объекта не будет учавствовать в расчетах!';
+                    $itemData = -1;
+                    continue;
+                }
 
 
                 /**
                  * Перебор значений
                  */
-                if ($itemData != '') {
-                    if ($i == 0) {
-                        $arMD["head_year"][] = mb_convert_encoding($itemData, 'UTF-8', 'Windows-1251' );
-                    }
-                }
-                if ($itemData != '') {
-                    if ($i > 0) {
-                        if ($k == 0) {
-                            $arMD[$i-1]["district_name"] = mb_convert_encoding($itemData, 'UTF-8', 'Windows-1251' );
-                        }
-                        if ($k > 0 && $k < 3) {
-                            $arMD[$i-1]["year"][] = mb_convert_encoding($arMD["head_year"][$k], 'UTF-8', 'Windows-1251' );
-                            $arMD[$i-1]["parameter_value"][$arMD["head_year"][$k]] = floatval(str_replace(',', '.', str_replace(' ', '', strval(mb_convert_encoding( $itemData, 'UTF-8', 'Windows-1251' )))));
-                        }
 
-                        if ($k == 3) {
-                            $arMD[$i-1]["type"] = mb_convert_encoding($itemData, 'UTF-8', 'Windows-1251' );
-                        }
 
+                if ($i == 0) { // Берем первую строку файла (шапка)
+                    foreach ($arParameter as $itemParam) { // Перебераем параметры, которые есть в базе
+                        if ($itemParam->getCode() == $itemData) { // Проверяем с код параметры из базы с импортируемым
+                            $arMD["code"][] = $itemData; // Если есть совпадение пишем код параметра в массив
+                            $arMD["id"][] = $itemParam->getId(); // Если есть совпадение пишем id параметра в массив
+                        }
                     }
                 }
 
+
+                // Смотрим остальные строки
+                if ($i > 0) {
+                    if ($k == 0) { // Первая ячейка, тут должна быть дата (DAT)
+                        $year = array();
+                        $year = explode('.', $itemData);
+                        $arMD['date'][$i-1]["year"] = (int)end($year);
+                        $arMD['date'][$i-1]["date"] = $itemData;
+                    } else {
+                        if (!empty($arMD["code"])) {
+                            $arMD['value'][$i-1][$arMD["code"][$k]] = $itemData;
+                        }
+                    }
+                }
             }
 
             $i++;
-
-            /**
-             * Прекращаем работу, если хоть одна ячейка не соответсвует кодировки!
-             */
-
-            if (!empty($arrErrors["coding"])) {
-                echo "Ошибка кодировки!";
-                var_dump($arrErrors);
-                $arMD = array();
-                break;
-            }
-
         }
 
-        array_splice($arMD, 0, 1);
+
+        if (empty($arMD["code"])) {
+            $arrErrors["values"][] = 'Ошибка! В шапке таблицы не найден код параметра, перейдите в раздел "Параметры" и заполните форму!';
+        }
+
+        if (!empty($arMD['code']) || !empty($arMD['id'])) {
+            array_splice($arMD['code'], 0, 1);
+            array_splice($arMD['id'], 0, 1);
+        }
+
+
         $arResult["result"] = $arMD;
 
         if ($arrErrors) {

@@ -13,3 +13,7 @@ andy_diffuse_river_project:
 andy_diffuse_river_point:
     resource: "@AndyDiffuseRiverBundle/Resources/config/routing/point.yml"
     prefix:   /project
+
+andy_diffuse_river_parameter_value:
+    resource: "@AndyDiffuseRiverBundle/Resources/config/routing/parameter_value.yml"
+    prefix:   /project
