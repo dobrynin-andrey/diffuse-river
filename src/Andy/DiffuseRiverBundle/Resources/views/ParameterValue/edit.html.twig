@@ -1,21 +1,17 @@
 {% extends 'base.html.twig' %}
 
-
-{% block head_scripts %}
-    <script src="https://api-maps.yandex.ru/2.1/?lang=ru_RU" type="text/javascript"></script>
-{% endblock %}
-
 {% block title %}
-    {{ project.name }} | {{ point.name }}
+    {{ project.name }} | {{ point.name }} | Изменить значение параметра - {{ parameter.name }}
 {% endblock %}
 
 {% block page_title %}
-    Изменить точку: {{ point.name }}
+    Изменить значение параметра точки: {{ point.name }}
 {% endblock %}
 
 {% block breadcrumb %}
 <li><a href="{{ path('project_show', { 'id': project.id }) }}">{{ project.name }}</a><li>
-{{ point.name }}
+<li><a href="{{ path('point_show', { 'project' : project.id, 'id': point.id }) }}">{{ point.name }}</a><li>
+<li><a href="{{ path('parameter_value_show', { 'project' : project.id, 'id' : point.id, 'parameter' : parameter.id}) }}">{{ parameter.name }}</a><li>
 {% endblock %}
 
 {% block body %}
@@ -25,55 +21,35 @@
             <div class="white-box">
                 <div class="row sales-report">
                     <div class="col-md-6 col-sm-6 col-xs-12">
-                        <h1>Точка: {{ point.name }}</h1>
+                        <h1>Параметр: {{ parameter.name }}</h1>
 
                     </div>
                     <div class="col-md-6 col-sm-6 col-xs-12 ">
                         <div class="text-right text-info m-t-10">
-                            <a class="di m-t-15" href="{{ path('project_show', { 'id': project.id }) }}">Назад к списку</a>
+                            <a class="di m-t-15" href="{{ path('point_show', { 'project' : project.id, 'id': point.id }) }}">Назад к списку</a>
                         </div>
                     </div>
                 </div>
                 <div class="m-t-20">
-                    <p>Дата создания:  {% if point.createdDate %}{{ point.createdDate|date('d.m.Y H:i') }}{% endif %}</p>
-                    <p>Дата обновления:  {% if point.updatedDate %}{{ point.updatedDate|date('d.m.Y H:i') }}{% endif %}</p>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- row -->
-    <div class="row">
-        <div class="col-sm-12">
-            <div class="white-box">
-                <h3 class="box-title">Карта</h3>
-                <div id="map" style="width: 100%; height: 600px"></div>
-
-            </div>
-        </div>
-    </div>
-
-    {# Новая точка проекта #}
+    {# Изменить значения параметра #}
 
     <!-- .row -->
     <div class="row">
         <div class="col-sm-12">
             <div class="white-box">
-                <h3 class="box-title m-b-0">Изменить точку</h3>
-                <p class="text-muted m-b-30 font-13">Укажите на карте новую точку проекта или введите название</p>
+                <h3 class="box-title m-b-0">Изменить знечение параметра</h3>
+                <p class="text-muted m-b-30 font-13">Введите новое значение параметра</p>
                 {{ form_start(edit_form, {attr: {class: 'form-horizontal'} })  }}
                 <div class="form-group">
-                    <label for="{{ edit_form.name.vars.id }}" class="col-md-12">{{ form_label(edit_form.name) }}</label>
-                    {{ form_errors(edit_form.name) }}
+                    <label for="{{ edit_form.value.vars.id }}" class="col-md-12">{{ form_label(edit_form.value) }}</label>
+                    {{ form_errors(edit_form.value) }}
                     <div class="col-md-12">
-                        {{ form_widget(edit_form.name) }}
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label for="{{ edit_form.coords.vars.id }}" class="col-md-12">{{ form_label(edit_form.coords) }}</label>
-                    {{ form_errors(edit_form.coords) }}
-                    <div class="col-md-12">
-                        {{ form_widget(edit_form.coords) }}
+                        {{ form_widget(edit_form.value) }}
                     </div>
                 </div>
                 <button type="submit" class="btn waves-effect waves-light btn-info">Изменить</button>
@@ -87,24 +63,4 @@
             </div>
         </div>
     </div>
-
-    <script>
-        window.$inputCoords = '{{ edit_form.coords.vars.id }}';
-        window.$editPoint = true;
-        window.$points = {
-            name: [],
-            coords: []
-        };
-
-
-        window.$points.name.push('{{ point.name }}');
-        window.$points.coords.push('{{ point.coords }}');
-
-
-    </script>
-
-{% endblock %}
-
-{% block javascripts %}
-    <script src="{{ asset('js/ymap.js') }}"></script>
 {% endblock %}

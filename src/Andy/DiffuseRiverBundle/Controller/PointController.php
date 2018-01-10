@@ -111,7 +111,7 @@ class PointController extends Controller
                         // Сохраняем год и дату данных
                         $pramDate->setDate(new \DateTime ($date['date']));
                         // Привязываем к текущей точке
-                        $ParamDateId = $pramDate->setPointId($point->getId());
+                        $paramDateId = $pramDate->setPointId($point->getId());
                         $em->persist($pramDate); // "Коммитим" изменения перед отпоавкой в БД
                         $em->flush();
 
@@ -120,8 +120,8 @@ class PointController extends Controller
                         foreach ($arImportData['result']['value'][$keyDate] as $keyValue => $value) {
                             //Создаем экземпляр модели для таблицы ParamValue
                             $pramValue = new ParamValue();
-                            $pramValue->setParamDateId($ParamDateId->getId());
-                            $pramValue->setParameterId($arImportData['result']['id'][$id]);
+                            $pramValue->setParamDateId($paramDateId->getId()); // Берем id даты параметра из ранее привязанной точки
+                            $pramValue->setParameterId($arImportData['result']['id'][$id]); // Берем id параметра из парсинга
                             $pramValue->setValue($value);
                             $em->persist($pramValue); // "Коммитим" изменения перед отпоавкой в БД
                             $em->flush();
@@ -131,13 +131,16 @@ class PointController extends Controller
 
                     }
 
+                    // В конце импорта выводим соовбщение
                     $this->addFlash('success', 'Импорт завершен! Всего данных загружено: '. $d);
                 }
 
             }
 
+            // Вызов функции по выводу параметров из базы
             $parameters = $this->renderParameters($point);
 
+            // Ответ при импорте
             return $this->render('@AndyDiffuseRiver/Point/show.html.twig', array(
                 'point' => $point,
                 'project' => $project,
@@ -149,10 +152,10 @@ class PointController extends Controller
         } // Конец - При отправке формы импорта
 
 
-
+        // Вызов функции по выводу параметров из базы
         $parameters = $this->renderParameters($point);
 
-
+        // Ответ при простой загрузки страницы
         return $this->render('@AndyDiffuseRiver/Point/show.html.twig', array(
             'point' => $point,
             'project' => $project,

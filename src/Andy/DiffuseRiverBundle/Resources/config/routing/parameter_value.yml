@@ -1,14 +1,19 @@
 parameter_value_show:
-    path:     /{project}/point/{id}/parameter/{parameter}/
+    path:     /{project}/point/{id}/param/{parameter}/
     defaults: { _controller: "AndyDiffuseRiverBundle:ParameterValue:show" }
     methods:  [GET, POST]
 
 parameter_value_edit:
-    path:     /{project}/point/{id}/parameter/{parameter}/edit
+    path:     /{project}/point/{id}/param_value/{param_value}/edit
     defaults: { _controller: "AndyDiffuseRiverBundle:ParameterValue:edit" }
     methods:  [GET, POST]
 
+parameter_value_new:
+    path:     /{project}/point/{id}/param_value/{param_value}/new
+    defaults: { _controller: "AndyDiffuseRiverBundle:ParameterValue:new" }
+    methods:  [GET, POST]
+
 parameter_value_delete:
-    path:     /{project}/point/{id}/parameter/{parameter}/delete
+    path:     /{project}/point/{id}/param_value/{param_value}/delete
     defaults: { _controller: "AndyDiffuseRiverBundle:ParameterValue:delete" }
-    methods:  DELETE
+    methods:  [GET, DELETE]

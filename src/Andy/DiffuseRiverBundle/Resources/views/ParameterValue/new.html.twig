@@ -1,0 +1,99 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    {{ parameter. }} | Добавить новое значение параметра
+{% endblock %}
+
+{% block page_title %}
+    Добавить новое значение параметра
+{% endblock %}
+
+{% block breadcrumb %}
+    <li><a href="{{ path('parameter_index') }}">Параметры</a></li>
+    <li>Создать новый параметр</li>
+{% endblock %}
+
+{% block body %}
+
+
+    <!-- .row -->
+    <div class="row">
+        <div class="col-md-6">
+            <div class="white-box">
+                <h3 class="box-title m-b-0">Добавить новый параметр</h3>
+                <p class="text-muted m-b-30 font-13">Зполните поля</p>
+                {{ form_start(form, {attr: {class: 'form-horizontal'} })  }}
+                <div class="form-group">
+                    <label for="{{ form.name.vars.id }}" class="col-md-12">{{ form_label(form.name) }}</label>
+                    {{ form_errors(form.name) }}
+                    <div class="col-md-12">
+                        {{ form_widget(form.name) }}
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="{{ form.code.vars.id }}" class="col-md-12">{{ form_label(form.code) }}</label>
+                    {{ form_errors(form.code) }}
+                    <div class="col-md-12">
+                        {{ form_widget(form.code) }}
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="{{ form.edIzm.vars.id }}" class="col-md-12">{{ form_label(form.edIzm) }}</label>
+                    {{ form_errors(form.edIzm) }}
+                    <div class="col-md-12">
+                        {{ form_widget(form.edIzm) }}
+                    </div>
+                </div>
+
+                <button type="submit" class="btn waves-effect waves-light btn-success">Создать</button>
+                {{ form_end(form) }}
+                <br>
+                <a href="{{ path('parameter_index') }}">Назад к списку</a>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="white-box">
+                <h3 class="box-title m-b-0">Импортировать файл с параметрами</h3>
+                <p class="text-muted m-b-30 font-13">Загрузите файл</p>
+
+                {% for label, messages in app.session.flashbag.all %}
+                    {% for message in messages %}
+                        {% if label == 'success' %}
+                            <p class="text-success m-b-5 font-13">{{ message }}</p>
+                        {% else %}
+                            <p class="text-danger m-b-5 font-13">{{ message }}</p>
+                        {% endif %}
+                    {% endfor %}
+                {% endfor %}
+
+                {{ form_start(form_import, {attr: {class: 'form-horizontal'} })  }}
+
+                <div class="form-group">
+                    <label for="{{ form_import.file.vars.id }}" class="col-md-12">{{ form_label(form_import.file) }}</label>
+                    {{ form_errors(form_import.file) }}
+                    <div class="col-sm-12">
+                        <div class="fileinput fileinput-new input-group" data-provides="fileinput">
+                            <div class="form-control" data-trigger="fileinput">
+                                <i class="glyphicon glyphicon-file fileinput-exists"></i>
+                                <span class="fileinput-filename"></span>
+                            </div>
+                            <span class="input-group-addon btn btn-default btn-file">
+                                <span class="fileinput-new">Выбрать файл</span>
+                                <span class="fileinput-exists">Изменить</span>
+                                {{ form_widget(form_import.file) }}
+                            </span>
+                            <a href="#" class="input-group-addon btn btn-default fileinput-exists" data-dismiss="fileinput">Удалить</a>
+                        </div>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn waves-effect waves-light btn-success">Импортировать</button>
+                {{ form_end(form_import) }}
+                <br>
+                <br>
+                <a href="{{ path('parameter_index') }}">Назад к списку</a>
+            </div>
+        </div>
+    </div>
+{% endblock %}

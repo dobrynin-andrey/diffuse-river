@@ -23,7 +23,7 @@
                     <div class="row sales-report">
                         <div class="col-md-6 col-sm-6 col-xs-12">
                             <h1>Параметр: {{ parameter.name }}, точки: {{ point.name }}</h1>
-
+                            <h3>Код параметра: {{ parameter.code }}</h3>
                         </div>
                         <div class="col-md-6 col-sm-6 col-xs-12 ">
                             <div class="text-right text-info m-t-15">
@@ -48,7 +48,7 @@
                             <h3>Значения параметра текущей точки</h3>
                         </div>
                         <div class="col-md-6 col-sm-6 col-xs-6 text-right">
-                            <a class="di m-t-20 btn btn-success" href="{{ path('parameter_new') }}">Создать новый параметр</a>
+                            {#<a class="di m-t-20 btn btn-success" href="{{ path('parameter_new') }}">Создать новый параметр</a>#}
 
                         </div>
                     </div>
@@ -57,9 +57,9 @@
                             <thead>
                             <tr>
                                 <th>#</th>
-                                <th>Название</th>
-                                <th>Код</th>
-                                <th>Единицы измерения</th>
+                                <th>Дата</th>
+                                <th>Единица измерения</th>
+                                <th>Значение</th>
                                 <th>Действия</th>
                             </tr>
                             </thead>
@@ -70,19 +70,21 @@
                                         {{ loop.index }}
                                     </td>
                                     <td class="txt-oflo">
-                                      {{ parameter.name }}
+                                        {% if itemParam['date'].date %}
+                                            {{ itemParam['date'].date|date('d.m.Y') }}
+                                        {% endif %}
                                     </td>
                                     <td class="txt-oflo">
                                         {{ parameter.edIzm }}
                                     </td>
                                     <td class="txt-oflo">
-                                        {{ itemParam.value }}
+                                        {{ itemParam['0'].value }}
                                     </td>
                                     <td>
-                                        <a href="{{ path('parameter_edit', { 'id': parameter.id }) }}" data-toggle="tooltip" data-original-title="Изменить">
+                                        <a href="{{ path('parameter_value_edit', { 'project' : project.id, 'id': point.id, 'param_value' : itemParam['0'].id }) }}" data-toggle="tooltip" data-original-title="Изменить">
                                             <i class="fa fa-pencil text-inverse m-r-10"></i>
                                         </a>
-                                        <a href="{{ path('parameter_delete', { 'id': parameter.id }) }}" data-toggle="tooltip" data-original-title="Удалить">
+                                        <a href="{{ path('parameter_value_delete', { 'project' : project.id ,'id': point.id, 'param_value' : itemParam['0'].id }) }}" data-toggle="tooltip" data-original-title="Удалить">
                                             <i class="fa fa-close text-danger"></i>
                                         </a>
                                     </td>
