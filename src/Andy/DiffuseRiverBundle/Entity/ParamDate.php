@@ -3,6 +3,7 @@
 namespace Andy\DiffuseRiverBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints\DateTime;
 
 /**
  * ParamDate
@@ -33,17 +34,11 @@ class ParamDate
      */
     private $pointId;
 
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="year", type="integer")
-     */
-    private $year;
 
     /**
-     * @var string
+     * @var \DateTime
      *
-     * @ORM\Column(name="date", type="string", length=10)
+     * @ORM\Column(name="date", type="datetime")
      */
     private $date;
 
@@ -82,34 +77,11 @@ class ParamDate
         return $this->pointId;
     }
 
-    /**
-     * Set year
-     *
-     * @param integer $year
-     *
-     * @return ParamDate
-     */
-    public function setYear($year)
-    {
-        $this->year = $year;
-
-        return $this;
-    }
-
-    /**
-     * Get year
-     *
-     * @return int
-     */
-    public function getYear()
-    {
-        return $this->year;
-    }
 
     /**
      * Set date
      *
-     * @param string $date
+     * @param \DateTime $date
      *
      * @return ParamDate
      */
@@ -123,7 +95,7 @@ class ParamDate
     /**
      * Get date
      *
-     * @return string
+     * @return \DateTime
      */
     public function getDate()
     {

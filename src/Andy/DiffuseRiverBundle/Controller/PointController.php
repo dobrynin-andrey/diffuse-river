@@ -19,6 +19,32 @@ use Symfony\Component\HttpFoundation\Request;
  */
 class PointController extends Controller
 {
+    /**
+     * Вывод параметров, которые пренадлежат данной точке
+     */
+
+    public function renderParameters(Point $point) {
+
+        $em = $this->getDoctrine()->getManager();
+        // Запрос обеденяет ParamValue и ParamValue, вовдит только массив parameterId тукущей точки
+        $query = $em->createQuery(
+            'SELECT DISTINCT(pv.parameterId)
+            FROM AndyDiffuseRiverBundle:ParamValue pv
+            JOIN AndyDiffuseRiverBundle:ParamDate pd
+            WHERE pd.pointId = :point
+            ORDER BY pd.date ASC'
+        )->setParameter('point', $point);
+
+        // Убирвем лишнюю вложенность массива из запроса
+        $arParameterId = array_column($query->getResult(), '1');
+
+        // Ноходим список параметров данной точки
+        $parameters = $em->getRepository('AndyDiffuseRiverBundle:Parameter')->findBy(
+            array('id' => $arParameterId)
+        );
+
+        return $parameters;
+    }
 
 
     /**
@@ -83,8 +109,7 @@ class PointController extends Controller
                         $pramDate = new ParamDate();
 
                         // Сохраняем год и дату данных
-                        $pramDate->setYear($date['year']);
-                        $pramDate->setDate($date['date']);
+                        $pramDate->setDate(new \DateTime ($date['date']));
                         // Привязываем к текущей точке
                         $ParamDateId = $pramDate->setPointId($point->getId());
                         $em->persist($pramDate); // "Коммитим" изменения перед отпоавкой в БД
@@ -111,9 +136,12 @@ class PointController extends Controller
 
             }
 
+            $parameters = $this->renderParameters($point);
+
             return $this->render('@AndyDiffuseRiver/Point/show.html.twig', array(
                 'point' => $point,
                 'project' => $project,
+                'parameters' => $parameters,
                 'form_import' => $form_import->createView(),
                 'import_success' => $importResult['success'],
                 'import_error' => $importResult['error']
@@ -121,26 +149,9 @@ class PointController extends Controller
         } // Конец - При отправке формы импорта
 
 
-        /**
-         * Вывод параметров, которые пренадлежат данной точке
-        */
-        $em = $this->getDoctrine()->getManager();
-        // Запрос обеденяет ParamValue и ParamValue, вовдит только массив parameterId тукущей точки
-        $query = $em->createQuery(
-            'SELECT DISTINCT(pv.parameterId)
-            FROM AndyDiffuseRiverBundle:ParamValue pv
-            JOIN AndyDiffuseRiverBundle:ParamDate pd
-            WHERE pd.pointId = :point
-            ORDER BY pd.year ASC'
-        )->setParameter('point', $point);
 
-        // Убирвем лишнюю вложенность массива из запроса
-        $arParameterId = array_column($query->getResult(), '1');
+        $parameters = $this->renderParameters($point);
 
-        // Ноходим список параметров данной точки
-        $parameters = $em->getRepository('AndyDiffuseRiverBundle:Parameter')->findBy(
-            array('id' => $arParameterId)
-        );
 
         return $this->render('@AndyDiffuseRiver/Point/show.html.twig', array(
             'point' => $point,
