@@ -21,11 +21,11 @@
             <div class="col-md-12 col-lg-12 col-sm-12">
                 <div class="white-box">
                     <div class="row sales-report">
-                        <div class="col-md-6 col-sm-6 col-xs-12">
+                        <div class="col-md-9 col-sm-9 col-xs-12">
                             <h1>Параметр: {{ parameter.name }}, точки: {{ point.name }}</h1>
                             <h3>Код параметра: {{ parameter.code }}</h3>
                         </div>
-                        <div class="col-md-6 col-sm-6 col-xs-12 ">
+                        <div class="col-md-3 col-sm-3 col-xs-12">
                             <div class="text-right text-info m-t-15">
                                 {#<h5><a href="{{ path('point_edit', { 'project': project.id, 'id': point.id }) }}">Изменить</a></h5>#}
                                 <h5><a href="{{ path('point_show', { 'project': project.id, 'id': point.id  }) }}">Назад к списку</a></h5>
