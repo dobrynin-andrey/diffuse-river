@@ -181,15 +181,12 @@ class ImportCSV {
                 // Смотрим остальные строки
                 if ($i > 0) {
                     if ($k == 0) { // Первая ячейка, тут должна быть дата (DAT)
-                        $year = array();
-                        $year = explode('.', $itemData);
-                        $arMD['date'][$i-1]["year"] = (int)end($year);
                         $arMD['date'][$i-1]["date"] = $itemData;
                     } else {
                         if (!empty($arMD["code"][$k])) {
                             $arMD['value'][$i-1][$arMD["code"][$k]] = $itemData;
                         } else {
-                            $arrErrors["values"][] = 'Ошибка! Не найден индекс: ' . $k . ', с для значения : ' . $itemData . '.';
+                            $arrErrors["values"][] = 'Ошибка! Не найден индекс: ' . $k . ', с для значением : ' . $itemData . '.';
                         }
                     }
                 }
