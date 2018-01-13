@@ -2,6 +2,7 @@
 
 namespace Andy\DiffuseRiverBundle\Controller;
 
+use Andy\DiffuseRiverBundle\Entity\Parameter;
 use Andy\DiffuseRiverBundle\Entity\Project;
 use Andy\DiffuseRiverBundle\Entity\Point;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -44,9 +45,20 @@ class ProjectController extends Controller
             return $this->redirectToRoute('project_show', array('id' => $project->getId()));
         }
 
+        // Проверка есть ли в базе параметры
+        $em = $this->getDoctrine()->getManager();
+
+        $parameters = $em->getRepository('AndyDiffuseRiverBundle:Parameter')->findAll();
+
+        if (empty($parameters))
+            $parameters = false;
+        else
+            $parameters = true;
+
         return $this->render('@AndyDiffuseRiver/Project/show.html.twig',  array(
             'points' => $points,
             'project' => $project,
+            'parameters' => $parameters,
             'form' => $form->createView(),
         ));
     }

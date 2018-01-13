@@ -96,7 +96,7 @@
 
     </script>
 
-    {% if points | length > 0 %}
+    {% if points | length > 0 and parameters %}
 
 
         <div class="row">
@@ -147,6 +147,21 @@
                             {% endfor %}
                             </tbody>
                         </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% elseif not parameters %}
+        <div class="row">
+            <div class="col-md-12 col-lg-12 col-sm-12">
+                <div class="white-box">
+                    <div class="row sales-report">
+                        <div class="col-md-6 col-sm-6 col-xs-6">
+                            <h1>Параметров нет!</h1>
+                        </div>
+                        <div class="col-md-6 col-sm-6 col-xs-6 ">
+                            <h3 class="text-right text-info m-t-20"><a href="{{ path('parameter_new') }}">Добавить параметры</a></h3>
+                        </div>
                     </div>
                 </div>
             </div>

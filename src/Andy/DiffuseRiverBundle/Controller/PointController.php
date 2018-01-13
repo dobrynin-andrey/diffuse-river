@@ -23,27 +23,38 @@ class PointController extends Controller
      * Вывод параметров, которые пренадлежат данной точке
      */
 
-    public function renderParameters(Point $point) {
+    public function renderParameters(Point $point)
+    {
 
         $em = $this->getDoctrine()->getManager();
-        // Запрос обеденяет ParamValue и ParamValue, вовдит только массив parameterId тукущей точки
-        $query = $em->createQuery(
-            'SELECT DISTINCT(pv.parameterId)
-            FROM AndyDiffuseRiverBundle:ParamValue pv
-            JOIN AndyDiffuseRiverBundle:ParamDate pd
-            WHERE pd.pointId = :point
-            ORDER BY pd.date ASC'
-        )->setParameter('point', $point);
 
-        // Убирвем лишнюю вложенность массива из запроса
-        $arParameterId = array_column($query->getResult(), '1');
+        // Проверка на наличие в базе данных ParamDate
+        $paramDate = $em->getRepository('AndyDiffuseRiverBundle:ParamDate')->find($point);
 
-        // Ноходим список параметров данной точки
-        $parameters = $em->getRepository('AndyDiffuseRiverBundle:Parameter')->findBy(
-            array('id' => $arParameterId)
-        );
+        if ($paramDate) {
 
-        return $parameters;
+            // Запрос обеденяет ParamValue и ParamValue, вовдит только массив parameterId тукущей точки
+            $query = $em->createQuery(
+                'SELECT DISTINCT(pv.parameterId)
+                FROM AndyDiffuseRiverBundle:ParamValue pv
+                JOIN AndyDiffuseRiverBundle:ParamDate pd
+                WHERE pd.pointId = :point
+                ORDER BY pd.date ASC'
+            )->setParameter('point', $point);
+
+
+            // Убирвем лишнюю вложенность массива из запроса
+            $arParameterId = array_column($query->getResult(), '1');
+
+            // Ноходим список параметров данной точки
+            $parameters = $em->getRepository('AndyDiffuseRiverBundle:Parameter')->findBy(
+                array('id' => $arParameterId)
+            );
+
+            return $parameters;
+        } else {
+            return false;
+        }
     }
 
 
