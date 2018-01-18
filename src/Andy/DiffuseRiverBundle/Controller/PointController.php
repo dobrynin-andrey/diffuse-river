@@ -38,8 +38,7 @@ class PointController extends Controller
                 'SELECT DISTINCT(pv.parameterId)
                 FROM AndyDiffuseRiverBundle:ParamValue pv
                 JOIN AndyDiffuseRiverBundle:ParamDate pd
-                WHERE pd.pointId = :point
-                ORDER BY pd.date ASC'
+                WHERE pd.pointId = :point'
             )->setParameter('point', $point);
 
 
@@ -48,7 +47,8 @@ class PointController extends Controller
 
             // Ноходим список параметров данной точки
             $parameters = $em->getRepository('AndyDiffuseRiverBundle:Parameter')->findBy(
-                array('id' => $arParameterId)
+                array('id' => $arParameterId),
+                array('name' => 'asc')
             );
 
             return $parameters;
