@@ -16,11 +16,17 @@ use Symfony\Component\HttpFoundation\Request;
 /**
  * Point controller.
  *
+ * Class PointController
+ * @package Andy\DiffuseRiverBundle\Controller
  */
+
 class PointController extends Controller
 {
     /**
      * Вывод параметров, которые пренадлежат данной точке
+     *
+     * @param Point $point
+     * @return Parameter[]|array|bool
      */
 
     public function renderParameters(Point $point)
@@ -61,6 +67,10 @@ class PointController extends Controller
     /**
      * Finds and displays a point entity.
      *
+     * @param Request $request
+     * @param Project $project
+     * @param Point $point
+     * @return \Symfony\Component\HttpFoundation\Response
      */
     public function showAction(Request $request, Project $project, Point $point)
     {
@@ -178,7 +188,12 @@ class PointController extends Controller
     /**
      * Displays a form to edit an existing point entity.
      *
+     * @param Request $request
+     * @param Project $project
+     * @param Point $point
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
      */
+
     public function editAction(Request $request, Project $project, Point $point)
     {
         $deleteForm = $this->createDeleteForm($project, $point);
@@ -202,6 +217,10 @@ class PointController extends Controller
     /**
      * Deletes a point entity.
      *
+     * @param Request $request
+     * @param Project $project
+     * @param Point $point
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
      */
     public function deleteAction(Request $request, Project $project, Point $point)
     {
