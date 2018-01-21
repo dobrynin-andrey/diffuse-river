@@ -1,0 +1,7 @@
+/* Calculate loader */
+.form-calculate-loader {
+    width: 60px;
+    height: 60px;
+    display: none;
+    margin-right: 15px;
+}

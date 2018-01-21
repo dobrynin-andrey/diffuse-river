@@ -17,3 +17,7 @@ andy_diffuse_river_point:
 andy_diffuse_river_parameter_value:
     resource: "@AndyDiffuseRiverBundle/Resources/config/routing/parameter_value.yml"
     prefix:   /project
+
+andy_diffuse_river_calculate:
+    path:     /calculate
+    defaults: { _controller: AndyDiffuseRiverBundle:Calculate:index }

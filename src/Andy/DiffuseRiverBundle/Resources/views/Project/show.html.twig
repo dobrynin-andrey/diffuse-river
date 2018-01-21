@@ -102,52 +102,68 @@
         <div class="row">
             <div class="col-md-12 col-lg-12 col-sm-12">
                 <div class="white-box">
-                    <h2>Точки</h2>
-                    <div class="table-responsive">
-                        <table class="table">
-                            <thead>
-                            <tr>
-                                <th>#</th>
-                                <th>Название</th>
-                                <th>Координаты</th>
-                                <th>Дата создания</th>
-                                <th>Дата обновления</th>
-                                <th>Действия</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            {% for point in points %}
+                    <form id="form-calculate" class="js-ajax-form-calculate" action="{{ path('andy_diffuse_river_calculate') }}">
+                        <div class="row">
+                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                <h2>Точки</h2>
+                                <p>Выберете точки, между которыми хотите произвести расчет.</p>
+                            </div>
+                            <div class="col-md-6 col-sm-6 col-xs-12 text-right" style="line-height: 88px">
+                                <img class="form-calculate-loader js-ajax-form-calculate-loader" src="{{ asset('plugins/images/preloader.gif') }}" alt="Загрузка...">
+                                <button type="submit" class="btn waves-effect waves-light btn-info">Рассчитать</button>
+                                <p class="success js-ajax-result"></p>
+                            </div>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="table">
+                                <thead>
                                 <tr>
-                                    <td>
-                                        {{ loop.index }}
-                                    </td>
-                                    <td class="txt-oflo">
-                                        <a href="{{ path('point_show', { 'project': project.id, 'id': point.id }) }}">
-                                            {{ point.name }}
-                                        </a>
-                                    </td>
-                                    <td class="txt-oflo">
-                                       {{ point.coords }}
-                                    </td>
-                                    <td class="txt-oflo">
-                                        {% if point.createdDate %}{{ point.createdDate|date('d.m.Y H:i') }}{% endif %}
-                                    </td>
-                                    <td class="txt-oflo">
-                                        {% if point.updatedDate %}{{ point.updatedDate|date('d.m.Y H:i') }}{% endif %}
-                                    </td>
-                                    <td>
-                                        <a href="{{ path('point_show', { 'project': project.id, 'id': point.id }) }}" data-toggle="tooltip" data-original-title="Показать">
-                                            <i class="fa fa-chain fa-fw" aria-hidden="true"></i>
-                                        </a> |&nbsp;
-                                        <a href="{{ path('point_edit', { 'project': project.id, 'id': point.id }) }}" data-toggle="tooltip" data-original-title="Изменить">
-                                            <i class="fa fa-pencil text-inverse m-r-10"></i>
-                                        </a>
-                                    </td>
+                                    <th>#</th>
+                                    <th>Выбрать</th>
+                                    <th>Название</th>
+                                    <th>Координаты</th>
+                                    <th>Дата создания</th>
+                                    <th>Дата обновления</th>
+                                    <th>Действия</th>
                                 </tr>
-                            {% endfor %}
-                            </tbody>
-                        </table>
-                    </div>
+                                </thead>
+                                <tbody>
+                                {% for point in points %}
+                                    <tr>
+                                        <td>
+                                            {{ loop.index }}
+                                        </td>
+                                        <td>
+                                            <input class="js-input-choose" id="checkbox-{{ point.id }}" type="checkbox" value="{{ point.id }}">
+                                        </td>
+                                        <td class="txt-oflo">
+                                            <a href="{{ path('point_show', { 'project': project.id, 'id': point.id }) }}">
+                                                {{ point.name }}
+                                            </a>
+                                        </td>
+                                        <td class="txt-oflo">
+                                           {{ point.coords }}
+                                        </td>
+                                        <td class="txt-oflo">
+                                            {% if point.createdDate %}{{ point.createdDate|date('d.m.Y H:i') }}{% endif %}
+                                        </td>
+                                        <td class="txt-oflo">
+                                            {% if point.updatedDate %}{{ point.updatedDate|date('d.m.Y H:i') }}{% endif %}
+                                        </td>
+                                        <td>
+                                            <a href="{{ path('point_show', { 'project': project.id, 'id': point.id }) }}" data-toggle="tooltip" data-original-title="Показать">
+                                                <i class="fa fa-chain fa-fw" aria-hidden="true"></i>
+                                            </a> |&nbsp;
+                                            <a href="{{ path('point_edit', { 'project': project.id, 'id': point.id }) }}" data-toggle="tooltip" data-original-title="Изменить">
+                                                <i class="fa fa-pencil text-inverse m-r-10"></i>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
@@ -188,5 +204,62 @@
 {% endblock %}
 
 {% block javascripts %}
-    <script src="{{ asset('js/ymap.js') }}"></script>
+    <script src="{{ asset('js/ymap/ymap.project.js') }}"></script>
+
+    <script>
+        $(document).ready(function () {
+            var checklist = [];
+            $(".js-input-choose").change(function() {
+                var val = this.value|0; // to int
+
+                if (this.checked) {
+                    checklist.push(val); // если в начало, то .ushift(val)
+                } else {
+                    var idx = $.inArray(val, checklist);
+                    if( idx > -1 ){
+                        checklist.splice(idx, 1);
+                    }
+                }
+                if (checklist.length > 2) {
+                    var deleteCheckbox = checklist.shift();
+                    $('#checkbox-'+deleteCheckbox).prop('checked',false);
+                }
+            });
+
+            $('.js-ajax-form-calculate').on('submit', function (event) {
+                event.preventDefault();
+                var data = {};
+                checklist.forEach(function (item, key) {
+                    if (key === 0) {
+                        data['start'] = item;
+                    } else {
+                        data['end'] = item;
+                    }
+                });
+
+                $.ajax({
+                    type: 'POST',
+                    contentType: "application/json",
+                    dataType: 'json',
+                    cache: false,
+                    url: $(this).attr('action'),
+                    data: JSON.stringify(data),
+                    beforeSend: function() {
+                        $('.js-ajax-form-calculate-loader').show();
+                    },
+                    complete: function() {
+                        $('.js-ajax-form-calculate-loader').hide();
+                    },
+                    success: function (data) {
+                        $('.js-ajax-result').html(data);
+                        console.log(data);
+                        console.log(jQuery.parseJSON(data));
+                    },
+                    error: function(er){
+                        console.log(er);
+                    }
+                });
+            });
+        });
+    </script>
 {% endblock %}
