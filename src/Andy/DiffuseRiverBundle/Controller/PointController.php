@@ -31,11 +31,14 @@ class PointController extends Controller
 
     public function renderParameters(Point $point)
     {
-
         $em = $this->getDoctrine()->getManager();
 
         // Проверка на наличие в базе данных ParamDate
-        $paramDate = $em->getRepository('AndyDiffuseRiverBundle:ParamDate')->find($point);
+        $paramDate = $em->getRepository('AndyDiffuseRiverBundle:ParamDate')->findBy(
+            array(
+                'pointId' => $point->getId()
+            )
+        );
 
         if ($paramDate) {
 
@@ -46,7 +49,6 @@ class PointController extends Controller
                 JOIN AndyDiffuseRiverBundle:ParamDate pd
                 WHERE pd.pointId = :point'
             )->setParameter('point', $point);
-
 
             // Убирвем лишнюю вложенность массива из запроса
             $arParameterId = array_column($query->getResult(), '1');
@@ -171,7 +173,6 @@ class PointController extends Controller
                 'import_error' => $importResult['error']
             ));
         } // Конец - При отправке формы импорта
-
 
         // Вызов функции по выводу параметров из базы
         $parameters = $this->renderParameters($point);
