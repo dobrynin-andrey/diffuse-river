@@ -2,7 +2,9 @@
 
 namespace Andy\DiffuseRiverBundle\Controller;
 
+use Andy\DiffuseRiverBundle\Entity\ParamDate;
 use Andy\DiffuseRiverBundle\Entity\Parameter;
+use Andy\DiffuseRiverBundle\Entity\ParamValue;
 use Andy\DiffuseRiverBundle\Entity\Project;
 use Andy\DiffuseRiverBundle\Entity\Point;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -97,8 +99,39 @@ class ProjectController extends Controller
 
         if ($form->isSubmitted() && $form->isValid()) {
             $em = $this->getDoctrine()->getManager();
+            // Находим все точки проекта
+            $points = $em->getRepository('AndyDiffuseRiverBundle:Point')->findBy(array(
+                'projectId' => $project->getId()
+            ));
+            // Перебирем точки и находим ParamDate
+            $paramDateId = array();
+            foreach ($points as $point) {
+                $paramDateId = $em->getRepository('AndyDiffuseRiverBundle:ParamDate')->findBy(array(
+                    'pointId' => $point->getId()
+                ));
+                if (!empty($paramDateId)) {
+                    // Перебирем ParamDate и находим ParamValue
+                    foreach ($paramDateId as $itemParamDateId) {
+                        $paramValue = $em->getRepository('AndyDiffuseRiverBundle:ParamValue')->findBy(array(
+                            'paramDateId' => $itemParamDateId
+                        ));
+                        // Перебирем ParamValue и добавляем на удаление
+                        if (!empty($paramValue)) {
+                            foreach ($paramValue as $itemParamValue) {
+                                $em->remove($itemParamValue);
+                            }
+                        }
+                        // Добавляем на удаление ParamDate
+                        $em->remove($itemParamDateId);
+                    }
+                }
+                // Добавляем на удаление точки
+                $em->remove($point);
+            }
+            // Добавляем на удаление Проект
             $em->remove($project);
             $em->flush();
+
         }
 
         return $this->redirectToRoute('andy_diffuse_river_homepage');
