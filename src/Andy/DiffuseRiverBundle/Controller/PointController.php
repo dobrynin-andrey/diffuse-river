@@ -47,7 +47,8 @@ class PointController extends Controller
                 'SELECT DISTINCT(pv.parameterId)
                 FROM AndyDiffuseRiverBundle:ParamValue pv
                 JOIN AndyDiffuseRiverBundle:ParamDate pd
-                WHERE pd.pointId = :point'
+                WHERE pd.pointId = :point
+                AND pv.paramDateId = pd.id'
             )->setParameter('point', $point);
 
             // Убирвем лишнюю вложенность массива из запроса
