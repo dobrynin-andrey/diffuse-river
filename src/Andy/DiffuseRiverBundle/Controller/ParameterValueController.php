@@ -62,9 +62,10 @@ class ParameterValueController extends Controller
             FROM AndyDiffuseRiverBundle:ParamValue pv
             JOIN AndyDiffuseRiverBundle:ParamDate pd
             WHERE pv.parameterId = :parameter 
-            AND pv.paramDateId = pd.id
+            AND pd.pointId = :point
+            AND pd.id = pv.paramDateId
             ORDER BY pd.date ASC'
-        )->setParameter('parameter', $parameter);
+        )->setParameter('parameter', $parameter)->setParameter('point', $point);
 
         $arParameter = $query->getResult();
 
@@ -119,8 +120,10 @@ class ParameterValueController extends Controller
         $form = $this->createDeleteForm($project, $point, $param_value);
         $form->handleRequest($request);
 
+        $em = $this->getDoctrine()->getManager();
+
         if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
+
             $em->remove($param_value);
             $em->flush();
         }
