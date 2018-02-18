@@ -229,6 +229,26 @@ class PointController extends Controller
 
         if ($form->isSubmitted() && $form->isValid()) {
             $em = $this->getDoctrine()->getManager();
+            // Находим ParamDate
+            $paramDateId = $em->getRepository('AndyDiffuseRiverBundle:ParamDate')->findBy(array(
+                'pointId' => $point->getId()
+            ));
+            if (!empty($paramDateId)) {
+                // Перебирем ParamDate и находим ParamValue
+                foreach ($paramDateId as $itemParamDateId) {
+                    $paramValue = $em->getRepository('AndyDiffuseRiverBundle:ParamValue')->findBy(array(
+                        'paramDateId' => $itemParamDateId
+                    ));
+                    // Перебирем ParamValue и добавляем на удаление
+                    if (!empty($paramValue)) {
+                        foreach ($paramValue as $itemParamValue) {
+                            $em->remove($itemParamValue);
+                        }
+                    }
+                    // Добавляем на удаление ParamDate
+                    $em->remove($itemParamDateId);
+                }
+            }
             $em->remove($point);
             $em->flush();
         }
