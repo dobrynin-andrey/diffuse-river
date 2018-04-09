@@ -1,6 +1,8 @@
 <?php
 
 namespace Andy\DiffuseRiverBundle\Repository;
+use Andy\DiffuseRiverBundle\Entity\Parameter;
+use Andy\DiffuseRiverBundle\Entity\Point;
 
 /**
  * ParamValueRepository
@@ -10,4 +12,18 @@ namespace Andy\DiffuseRiverBundle\Repository;
  */
 class ParamValueRepository extends \Doctrine\ORM\EntityRepository
 {
+    public function getValueFromPointAndParameter(Point $point, Parameter $parameter) {
+
+        return $this->getEntityManager()
+            ->createQuery(
+            'SELECT pv, pd.date, pd.id
+            FROM AndyDiffuseRiverBundle:ParamValue pv
+            JOIN AndyDiffuseRiverBundle:ParamDate pd
+            WHERE pv.parameterId = :parameter 
+            AND pd.pointId = :point
+            AND pd.id = pv.paramDateId
+            ORDER BY pd.date ASC'
+        )->setParameter('parameter', $parameter)->setParameter('point', $point)
+            ->getResult();
+    }
 }

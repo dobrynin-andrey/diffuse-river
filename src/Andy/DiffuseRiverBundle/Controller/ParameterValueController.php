@@ -54,20 +54,9 @@ class ParameterValueController extends Controller
     {
 
         // Выводим значения параметров текущей точки
-
-        $em = $this->getDoctrine()->getManager();
-
-        $query = $em->createQuery(
-            'SELECT pv, pd.date
-            FROM AndyDiffuseRiverBundle:ParamValue pv
-            JOIN AndyDiffuseRiverBundle:ParamDate pd
-            WHERE pv.parameterId = :parameter 
-            AND pd.pointId = :point
-            AND pd.id = pv.paramDateId
-            ORDER BY pd.date ASC'
-        )->setParameter('parameter', $parameter)->setParameter('point', $point);
-
-        $arParameter = $query->getResult();
+        $arParameter = $this->getDoctrine()
+            ->getRepository('AndyDiffuseRiverBundle:ParamValue')
+            ->getValueFromPointAndParameter($point, $parameter);
 
         return $this->render('@AndyDiffuseRiver/ParameterValue/show.html.twig', array(
             'arParameter' => $arParameter,
@@ -148,27 +137,34 @@ class ParameterValueController extends Controller
      * Deletes all parameterValue entity.
      *
      */
-    public function delete_allAction(Request $request)
+    public function deleteAllAction(Request $request, Project $project, Point $point, Parameter $parameter)
     {
 
         // Удалить по клику в общем списке
         if ($request->getMethod() == 'GET') {
             $em = $this->getDoctrine()->getManager();
 
-            $delParameter = $em->getRepository('AndyDiffuseRiverBundle:ParamValue')->findAll();
-            if ($delParameter) {
+            $delParameter = $em->getRepository('AndyDiffuseRiverBundle:ParamValue')
+                ->getValueFromPointAndParameter($point, $parameter);
+
+            if (!empty($delParameter)) {
                 foreach ($delParameter as $itemDel) {
-                    $em->remove($itemDel);
+                    $paramDate = $em->getRepository('AndyDiffuseRiverBundle:ParamDate')
+                        ->find($itemDel['id']);
+                    $em->remove($paramDate);
+                    $em->remove($itemDel[0]);
                 }
 
                 $em->flush();
             }
-
-
         }
 
-
-        return $this->redirectToRoute('parameter_index');
+        return $this->redirectToRoute('point_show',
+            array(
+                'project' => $project->getId(),
+                'id' => $point->getId()
+            )
+        );
     }
 
     /**
