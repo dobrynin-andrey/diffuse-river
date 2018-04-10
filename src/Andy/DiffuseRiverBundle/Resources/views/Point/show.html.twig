@@ -54,14 +54,12 @@
         </div>
 
         {# Точка проекта #}
-
         <!-- .row -->
         <div class="row">
             <div class="col-sm-12">
                 <div class="white-box">
                     <h3 class="box-title m-b-0">Импоритровать данные точки</h3>
                     <p class="text-muted m-b-30 font-13">Загрузите значения параметров точки в <a href="{{ asset('upload/csv/import_csv/values_import_kamen.csv') }}">данном фомате</a>.</p>
-
                     {% for label, messages in app.session.flashbag.all %}
                         {% for message in messages %}
                             {% if label == 'success' %}
@@ -72,7 +70,7 @@
                         {% endfor %}
                     {% endfor %}
 
-                    {{ form_start(form_import, {attr: {class: 'form-horizontal'} })  }}
+                    {{ form_start(form_import, {attr: {class: 'form-horizontal', enctype: 'multipart/form-data'} })  }}
 
                     <div class="form-group">
                         <label for="{{ form_import.file.vars.id }}" class="col-md-12">{{ form_label(form_import.file) }}</label>
@@ -92,14 +90,11 @@
                             </div>
                         </div>
                     </div>
-
                     <button type="submit" class="btn waves-effect waves-light btn-success">Импортировать</button>
                     {{ form_end(form_import) }}
                     <br>
                     <a href="{{ path('project_show', {'id' : project.id}) }}">Назад к списку</a>
-
         </div>
-
         {% if parameters | length > 0 %}
         <div class="row">
             <div class="col-md-12 col-lg-12 col-sm-12">
@@ -141,10 +136,10 @@
                                         {{ parameter.edIzm }}
                                     </td>
                                     <td>
-                                        <a href="{{ path('parameter_edit', { 'id': parameter.id }) }}" data-toggle="tooltip" data-original-title="Изменить">
+                                        <a href="{{ path('parameter_value_show', {'project': project.id, 'id' : point.id, 'parameter' : parameter.id}) }}" data-toggle="tooltip" data-original-title="Изменить">
                                             <i class="fa fa-pencil text-inverse m-r-10"></i>
                                         </a>
-                                        <a href="{{ path('parameter_delete', { 'id': parameter.id }) }}" data-toggle="tooltip" data-original-title="Удалить">
+                                        <a class="js-delete" href="{{ path('parameter_value_delete_all', { 'project' : project.id, 'id': point.id, 'parameter': parameter.id }) }}" data-toggle="tooltip" data-original-title="Удалить">
                                             <i class="fa fa-close text-danger"></i>
                                         </a>
                                     </td>
@@ -171,11 +166,6 @@
             </div>
         </div>
     {% endif %}
-
-
-
-
-
         <script>
             window.$editPoint = true;
             window.$points = {
@@ -187,7 +177,6 @@
             window.$points.coords.push('{{ point.coords }}');
 
         </script>
-
     {% endblock %}
 
     {% block javascripts %}

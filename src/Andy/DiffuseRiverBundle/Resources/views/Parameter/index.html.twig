@@ -24,7 +24,7 @@
                         </div>
                         <div class="col-md-6 col-sm-6 col-xs-6 text-right">
                             <a class="di m-t-20 btn btn-success" href="{{ path('parameter_new') }}">Создать новый параметр</a>
-                            <a class="di m-t-20 btn btn-danger m-l-10" href="{{ path('parameter_delete_all') }}">Удалить все</a>
+                            <a class="di m-t-20 btn btn-danger m-l-10 js-delete" href="{{ path('parameter_delete_all') }}">Удалить все</a>
                         </div>
                     </div>
                     <div class="table-responsive">
@@ -57,7 +57,7 @@
                                         <a href="{{ path('parameter_edit', { 'id': parameter.id }) }}" data-toggle="tooltip" data-original-title="Изменить">
                                             <i class="fa fa-pencil text-inverse m-r-10"></i>
                                         </a>
-                                        <a href="{{ path('parameter_delete', { 'id': parameter.id }) }}" data-toggle="tooltip" data-original-title="Удалить">
+                                        <a class="js-delete" href="{{ path('parameter_delete', { 'id': parameter.id }) }}" data-toggle="tooltip" data-original-title="Удалить">
                                             <i class="fa fa-close text-danger"></i>
                                         </a>
                                     </td>

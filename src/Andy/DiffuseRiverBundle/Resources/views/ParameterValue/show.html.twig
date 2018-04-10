@@ -33,7 +33,6 @@
                         </div>
                     </div>
                     <div class="m-t-20">
-                        <a class="di m-t-15" href="{{ path('parameter_value_delete_all', { 'project' : project.id, 'id': point.id, 'parameter': parameter.id }) }}">Очистить все</a>
                     </div>
                 </div>
             </div>
@@ -49,8 +48,7 @@
                             <h3>Значения параметра текущей точки</h3>
                         </div>
                         <div class="col-md-6 col-sm-6 col-xs-6 text-right">
-                            {#<a class="di m-t-20 btn btn-success" href="{{ path('parameter_new') }}">Создать новый параметр</a>#}
-
+                            <a class="di btn btn-danger js-delete" href="{{ path('parameter_value_delete_all', { 'project' : project.id, 'id': point.id, 'parameter': parameter.id }) }}">Удалить все</a>
                         </div>
                     </div>
                     <div class="table-responsive">

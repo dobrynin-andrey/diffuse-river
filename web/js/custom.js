@@ -149,4 +149,33 @@
      $(".navbar-toggle").on("click", function () {
          $(".navbar-toggle i").toggleClass("ti-menu").addClass("ti-close");
      });
+
+
+     /* =================================================================
+        Update by Andy
+        Custom scripts
+    ================================================================= */
+
+     $('.js-delete').click(function (event) {
+
+         event = event || window.event;
+
+         if (event.preventDefault) { // если метод существует
+             event.preventDefault(); // то вызвать его
+         } else { // иначе вариант IE8-:
+             event.returnValue = false;
+         }
+
+         var isDelete = confirm("Удалить?");
+
+         if (isDelete) {
+             window.location.href = location.origin + $(this).attr('href');
+
+         } else {
+             return;
+         }
+
+
+     });
+
  });

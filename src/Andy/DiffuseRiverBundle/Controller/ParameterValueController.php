@@ -144,14 +144,28 @@ class ParameterValueController extends Controller
         if ($request->getMethod() == 'GET') {
             $em = $this->getDoctrine()->getManager();
 
+            // Выводим значения параметров текущей точки
             $delParameter = $em->getRepository('AndyDiffuseRiverBundle:ParamValue')
                 ->getValueFromPointAndParameter($point, $parameter);
 
+
             if (!empty($delParameter)) {
+
                 foreach ($delParameter as $itemDel) {
-                    $paramDate = $em->getRepository('AndyDiffuseRiverBundle:ParamDate')
-                        ->find($itemDel['id']);
-                    $em->remove($paramDate);
+                    // Делаем проверку на отсавшееся количество значений параметров
+                    $paramDateValue = $em->getRepository('AndyDiffuseRiverBundle:ParamValue')
+                        ->findBy(
+                            array(
+                                'paramDateId' => $itemDel['id']
+                            )
+                        );
+                    // Если остался один параметр, то удаляем и ParamDate
+                    if (count($paramDateValue) == 1) {
+                        $paramDate = $em->getRepository('AndyDiffuseRiverBundle:ParamDate')
+                            ->find($itemDel['id']);
+                        $em->remove($paramDate);
+                    }
+
                     $em->remove($itemDel[0]);
                 }
 
