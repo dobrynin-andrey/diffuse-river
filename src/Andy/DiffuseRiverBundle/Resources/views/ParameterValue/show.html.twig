@@ -95,20 +95,93 @@
                 </div>
             </div>
         </div>
-    {% else %}
-        <div class="row">
-            <div class="col-md-12 col-lg-12 col-sm-12">
-                <div class="white-box">
-                    <div class="row sales-report">
-                        <div class="col-md-6 col-sm-6 col-xs-6">
-                            <h1>Значений параметров нет!</h1>
+
+
+            {% if arParamQ | length > 0 and arParamQ['0'].code != parameter.code %}
+
+                <div class="row">
+                    <div class="col-md-12 col-lg-12 col-sm-12">
+                        <div class="white-box">
+                            <div class="table-responsive">
+                                <div class="row m-t-20" style="min-width: 600px; width: 100%; max-width: 100%;" id="plot-point">
+                                </div>
+                            </div>
                         </div>
-                        <div class="col-md-6 col-sm-6 col-xs-6 ">
+                    </div>
+                </div>
+
+                {% block head_scripts %}
+                    <script src="{{ asset('js/plotly/plotly-basic-latest.min.js') }}"></script>
+                {% endblock %}
+
+                <script>
+
+                    let x = [];
+                    let y = [];
+                    let xName, xCode, xEdIzm,
+                        yName, yCode, yEdIzm;
+
+                    {% for itemParamQ in arParamQ %}
+                        x.push({{ itemParamQ.value }});
+                        xName = '{{ itemParamQ.name }}';
+                        xEdIzm = '{{ itemParamQ.edIzm }}';
+                        xCode = '{{ itemParamQ.code }}';
+                    {% endfor %}
+
+                    yName = '{{ parameter.name }}';
+                    yEdIzm = '{{ parameter.edIzm }}';
+                    yCode = '{{ parameter.code }}';
+
+                    {% for itemParam in arParameter %}
+                        y.push({{ itemParam['0'].value }});
+                    {% endfor %}
+
+                    let trace = {
+                        type: "scatter",
+                        mode: "markers",
+                        name: 'AAPL High',
+                        x: x,
+                        y: y,
+                        line: {color: '#17BECF'}
+                    };
+
+                    let data = [trace];
+
+                    let layout = {
+                        title: 'График зависимостей',
+                        xaxis: {
+                            title: xName + ': ' + xCode + ', ' + xEdIzm,
+                            titlefont: {
+                                color: 'black',
+                                size: 13
+                            },
+                        },
+                        yaxis: {
+                            title: yName + ':' + yCode + ', ' + yEdIzm,
+                            titlefont: {
+                                color: 'black',
+                                size: 13
+                            },
+                        }
+                    };
+
+                    Plotly.newPlot('plot-point', data, layout);
+                </script>
+            {% endif %}
+        {% else %}
+            <div class="row">
+                <div class="col-md-12 col-lg-12 col-sm-12">
+                    <div class="white-box">
+                        <div class="row sales-report">
+                            <div class="col-md-6 col-sm-6 col-xs-6">
+                                <h1>Значений параметров нет!</h1>
+                            </div>
+                            <div class="col-md-6 col-sm-6 col-xs-6 ">
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
     {% endif %}
 
 

@@ -53,13 +53,19 @@ class ParameterValueController extends Controller
     public function showAction(Request $request, Project $project, Point $point, Parameter $parameter)
     {
 
+        $em = $this->getDoctrine()->getManager();
+
         // Выводим значения параметров текущей точки
-        $arParameter = $this->getDoctrine()
-            ->getRepository('AndyDiffuseRiverBundle:ParamValue')
+        $arParameter = $em->getRepository('AndyDiffuseRiverBundle:ParamValue')
             ->getValueFromPointAndParameter($point, $parameter);
+
+        // Получаем значения Расхода поды (Q) для постороения графика
+        $arParamQ = $em->getRepository('AndyDiffuseRiverBundle:ParamValue')
+            ->getValueByCodeParameter($point, 'Q');
 
         return $this->render('@AndyDiffuseRiver/ParameterValue/show.html.twig', array(
             'arParameter' => $arParameter,
+            'arParamQ' => $arParamQ,
             'parameter' => $parameter,
             'point' => $point,
             'project' => $project,
