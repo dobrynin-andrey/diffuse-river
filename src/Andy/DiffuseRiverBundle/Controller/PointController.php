@@ -133,6 +133,12 @@ class PointController extends Controller
                         $pramDate = new ParamDate();
 
                         // Сохраняем год и дату данных
+                        $dateStr = '';
+                        // Делаем дополнительную проверку на тот случай если дата записана с разделением ','
+                        if ($dateStr = str_replace(',', '.', $date['date'])) {
+                            $date['date'] = $dateStr;
+                        }
+
                         $pramDate->setDate(new \DateTime ($date['date']));
                         // Привязываем к текущей точке
                         $paramDateId = $pramDate->setPointId($point->getId());
@@ -146,7 +152,9 @@ class PointController extends Controller
                             $pramValue = new ParamValue();
                             $pramValue->setParamDateId($paramDateId->getId()); // Берем id даты параметра из ранее привязанной точки
                             $pramValue->setParameterId($arImportData['result']['id'][$id]); // Берем id параметра из парсинга
-                            $pramValue->setValue($value);
+                            $pramValue->setValue(
+                                is_double($value) ? $value : doubleval(str_replace(',', '.', $value))
+                            );
                             $em->persist($pramValue); // "Коммитим" изменения перед отпоавкой в БД
                             $em->flush();
                             $id++;
