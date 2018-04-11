@@ -76,7 +76,7 @@ $(document).ready(function () {
         var lastIndex = points._objects.length-1;
         //console.log(lastIndex);
 
-        points._objects.forEach(function (item, key) {
+        /*points._objects.forEach(function (item, key) {
             startPont = item;
             endPoint = points._objects[key+1];
             //console.log(startPont);
@@ -84,7 +84,7 @@ $(document).ready(function () {
             if (endPoint !== undefined) {
                 res = findClosestObjects(startPont, endPoint);
                // console.log(res);
-            }
+            }*/
 
             /*if (lastIndex !== key) {
                 findClosestObjects(startPont, item);
@@ -92,7 +92,7 @@ $(document).ready(function () {
                 console.log(key);
             }*/
 
-        });
+        /*});*/
 
 
         /**
