@@ -289,7 +289,7 @@ $(document).ready(function () {
 
 
         // Создание кнопки и добавление ее на карту.
-        var buttonCreateCalculation = new ymaps.control.Button({
+    /*    var buttonCreateCalculation = new ymaps.control.Button({
             data: {
                 // Зададим иконку для кнопки
                 // Текст на кнопке.
@@ -310,7 +310,7 @@ $(document).ready(function () {
             console.log(e);
             alert('test');
         });
-        myMap.controls.add(buttonCreateCalculation);
+        myMap.controls.add(buttonCreateCalculation);*/
 
 
 
