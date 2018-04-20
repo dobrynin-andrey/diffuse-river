@@ -3,16 +3,15 @@
 namespace Andy\DiffuseRiverBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * Point
+ * Result
  *
- * @ORM\Table(name="point")
- * @ORM\Entity(repositoryClass="Andy\DiffuseRiverBundle\Repository\PointRepository")
+ * @ORM\Table(name="result")
+ * @ORM\Entity(repositoryClass="Andy\DiffuseRiverBundle\Repository\ResultRepository")
  * @ORM\HasLifecycleCallbacks
  */
-class Point
+class Result
 {
 
     // В конструкторе вызываем функции по добавлению даты создания и обновления
@@ -39,47 +38,20 @@ class Point
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
-     *
-     * @ORM\OneToMany(targetEntity="Andy\DiffuseRiverBundle\Entity\ParamDate", mappedBy="pointId")
-     * @ORM\OneToMany(targetEntity="Andy\DiffuseRiverBundle\Entity\Result", mappedBy="pointId")
      */
     private $id;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="name", type="string", length=255)
-     *
-     * @Assert\NotBlank()
-     * @Assert\Length(
-     *     min="4",
-     *     max="255",
-     *     minMessage="Название не должно быть менее 4 символов.",
-     *     maxMessage="Название не должно быть более 255 символов."
-     * )
+     * @ORM\Column(name="value", type="text")
      */
-    private $name;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="coords", type="string", length=500)
-     *
-     * @Assert\NotBlank()
-     * @Assert\Length(
-     *     min="4",
-     *     max="500",
-     *     minMessage="Координаты не должны быть менее 4 символов.",
-     *     maxMessage="Координаты не должны быть более 500 символов."
-     * )
-     */
-    private $coords;
+    private $value;
 
     /**
      * @var \DateTime
      *
      * @ORM\Column(name="created_date", type="datetime")
-     *
      */
     private $createdDate;
 
@@ -99,6 +71,25 @@ class Point
      */
     private $projectId;
 
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="point_id", type="integer")
+     * @ORM\ManyToOne(targetEntity="Andy\DiffuseRiverBundle\Entity\Point", inversedBy="id")
+     * @ORM\JoinColumn(name="point_id", referencedColumnName="id")
+     *
+     */
+    private $pointId;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="parameter_id", type="integer")
+     * @ORM\ManyToOne(targetEntity="Andy\DiffuseRiverBundle\Entity\Parameter", inversedBy="id")
+     * @ORM\JoinColumn(name="parameter_id", referencedColumnName="id")
+     */
+    private $parameterId;
+
 
     /**
      * Get id
@@ -111,51 +102,27 @@ class Point
     }
 
     /**
-     * Set name
+     * Set value
      *
-     * @param string $name
+     * @param string $value
      *
-     * @return Point
+     * @return Result
      */
-    public function setName($name)
+    public function setValue($value)
     {
-        $this->name = $name;
+        $this->value = $value;
 
         return $this;
     }
 
     /**
-     * Get name
+     * Get value
      *
      * @return string
      */
-    public function getName()
+    public function getValue()
     {
-        return $this->name;
-    }
-
-    /**
-     * Set coords
-     *
-     * @param string $coords
-     *
-     * @return Point
-     */
-    public function setCoords($coords)
-    {
-        $this->coords = $coords;
-
-        return $this;
-    }
-
-    /**
-     * Get coords
-     *
-     * @return string
-     */
-    public function getCoords()
-    {
-        return $this->coords;
+        return $this->value;
     }
 
     /**
@@ -163,7 +130,7 @@ class Point
      *
      * @param \DateTime $createdDate
      *
-     * @return Point
+     * @return Result
      */
     public function setCreatedDate($createdDate)
     {
@@ -187,7 +154,7 @@ class Point
      *
      * @param \DateTime $updatedDate
      *
-     * @return Point
+     * @return Result
      */
     public function setUpdatedDate($updatedDate)
     {
@@ -211,7 +178,7 @@ class Point
      *
      * @param integer $projectId
      *
-     * @return Point
+     * @return Result
      */
     public function setProjectId($projectId)
     {
@@ -228,6 +195,54 @@ class Point
     public function getProjectId()
     {
         return $this->projectId;
+    }
+
+    /**
+     * Set pointId
+     *
+     * @param integer $pointId
+     *
+     * @return Result
+     */
+    public function setPointId($pointId)
+    {
+        $this->pointId = $pointId;
+
+        return $this;
+    }
+
+    /**
+     * Get pointId
+     *
+     * @return int
+     */
+    public function getPointId()
+    {
+        return $this->pointId;
+    }
+
+    /**
+     * Set parameterId
+     *
+     * @param integer $parameterId
+     *
+     * @return Result
+     */
+    public function setParameterId($parameterId)
+    {
+        $this->parameterId = $parameterId;
+
+        return $this;
+    }
+
+    /**
+     * Get parameterId
+     *
+     * @return int
+     */
+    public function getParameterId()
+    {
+        return $this->parameterId;
     }
 }
 

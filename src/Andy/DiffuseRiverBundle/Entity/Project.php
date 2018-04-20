@@ -40,6 +40,7 @@ class Project
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      * @ORM\OneToMany(targetEntity="Andy\DiffuseRiverBundle\Entity\Point", mappedBy="project_id")
+     * @ORM\OneToMany(targetEntity="Andy\DiffuseRiverBundle\Entity\Result", mappedBy="project_id")
      */
     private $id;
 
@@ -156,4 +157,3 @@ class Project
     }
 
 }
-

@@ -23,6 +23,7 @@ class Parameter
      * @ORM\GeneratedValue(strategy="AUTO")
      *
      * @ORM\OneToMany(targetEntity="Andy\DiffuseRiverBundle\Entity\ParamValue", mappedBy="parameterId")
+     * @ORM\OneToMany(targetEntity="Andy\DiffuseRiverBundle\Entity\Result", mappedBy="parameterId")
      */
     private $id;
 
