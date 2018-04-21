@@ -40,6 +40,226 @@
 
 
         {% if arParameter | length > 0 %}
+
+        {# Сначала покажем результаты если они есть #}
+
+        {% if arParamQ | length > 0 and arParamQ['0'].code != parameter.code %}
+
+        <div class="row">
+            <div class="col-md-12 col-lg-12 col-sm-12">
+                <div class="white-box">
+                    <div class="row">
+                        <div class="col-md-6 col-sm-6 col-xs-6">
+                            <h3>График на основе загруженных данных</h3>
+                            <p>Если значение "-1", то в расчетах не участвует!</p>
+                        </div>
+                    </div>
+                    <div class="table-responsive">
+                        <div class="row m-t-20" style="min-width: 600px; width: 100%;" id="plot-point">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12 col-lg-12 col-sm-12">
+                <div class="white-box">
+                    <div class="select-method">
+                        <div class="row">
+                            <div class="col-md-6 col-sm-6 col-xs-6">
+                                <h3>Выберете алгоритм расчета, исходя из графика:</h3>
+                            </div>
+                        </div>
+
+                        {% for label, messages in app.session.flashbag.all %}
+                            {% for message in messages %}
+                                {% if label == 'success' %}
+                                    <p class="text-success m-b-5 font-13">{{ message }}</p>
+                                {% else %}
+                                    <p class="text-danger m-b-5 font-13">{{ message }}</p>
+                                {% endif %}
+                            {% endfor %}
+                        {% endfor %}
+
+                        <form action="{{ path('andy_diffuse_river_calculate') }}" method="post">
+                            <input name="project" value="{{ project.id }}" type="hidden">
+                            <input name="point" value="{{ point.id }}" type="hidden">
+                            <input name="parameter" value="{{ parameter.id }}" type="hidden">
+                            <select class="m-r-20" name="method" id="method">
+                                <option value="0" selected>Не выбран</option>
+                                {% for itemMethod in diffuseMethod  %}
+                                    <option value="{{ itemMethod }}">Случай {{ itemMethod }}</option>
+                                {% endfor %}
+                            </select>
+                            <button class="btn btn-info" type="submit">Рассчитать</button>
+                        </form>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        {% if results | length > 0 %}
+
+        <div class="row">
+            <div class="col-md-12 col-lg-12 col-sm-12">
+                <div class="white-box">
+                    <div class="row">
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            <h2>Результаты расчета</h2>
+                        </div>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Название</th>
+                                <th>Значение</th>
+                                <th>Дата создания</th>
+                                <th>Дата обновления</th>
+                                <th>Действия</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for result in results %}
+                                <tr>
+                                    <td>
+                                        {{ loop.index }}
+                                    </td>
+
+                                    {% if result.value | length > 1 %}
+                                        <td colspan="2">
+                                            <table class="table">
+                                                <tbody>
+                                                {% for name, value in result.value %}
+                                                    <tr>
+                                                        <td class="txt-oflo">
+                                                            {{ name }}
+                                                        </td>
+                                                        <td class="txt-oflo">
+                                                            {{ value }}
+                                                        </td>
+                                                    </tr>
+                                                {% endfor %}
+                                                </tbody>
+                                            </table>
+                                        </td>
+                                    {% else %}
+                                        {% for name, value in result.value %}
+                                            <td class="txt-oflo">
+                                                {{ name }}
+                                            </td>
+                                            <td class="txt-oflo">
+                                                {{ value }}
+                                            </td>
+                                        {% endfor %}
+                                    {% endif %}
+
+                                    <td class="txt-oflo">
+                                        {% if result.createdDate %}{{ result.createdDate|date('d.m.Y H:i') }}{% endif %}
+                                    </td>
+                                    <td class="txt-oflo">
+                                        {% if result.updatedDate %}{{ result.updatedDate|date('d.m.Y H:i') }}{% endif %}
+                                    </td>
+                                    <td>
+                                        <a class="js-delete" href="{{ path('parameter_value_result_delete', { 'project' : project.id, 'id': point.id, 'parameter': parameter.id, 'result': result.id }) }}" data-toggle="tooltip" data-original-title="Удалить">
+                                            <i class="fa fa-close text-danger"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {% endif %}
+
+
+
+
+    {% block head_scripts %}
+        <script src="{{ asset('js/plotly/plotly-basic-latest.min.js') }}"></script>
+    {% endblock %}
+
+        <script>
+
+            let x = [];
+            let y = [];
+            let Yfit = [];
+            let xName, xCode, xEdIzm,
+                yName, yCode, yEdIzm;
+
+            {% for itemParamQ in X %}
+            x.push({{ itemParamQ }});
+            {% endfor %}
+
+            xName = '{{ arParamQ[0].name }}';
+            xEdIzm = '{{ arParamQ[0].edIzm }}';
+            xCode = '{{ arParamQ[0].code }}';
+
+            yName = '{{ parameter.name }}';
+            yEdIzm = '{{ parameter.edIzm }}';
+            yCode = '{{ parameter.code }}';
+
+            {% for itemParam in Y %}
+            y.push({{ itemParam }});
+            {% endfor %}
+
+            {% for itemParam in Yfit %}
+            Yfit.push({{ itemParam }});
+            {% endfor %}
+
+            let trace = {
+                type: "scatter",
+                mode: "markers",
+                name: 'Значения',
+                x: x,
+                y: y,
+                line: {color: '#17BECF'}
+            };
+
+            let trace2 = {
+                type: "scatter",
+                mode: "lines",
+                name: 'Линия тренда',
+                x: x,
+                y: Yfit,
+                line: {color: '#cf0531'}
+            };
+
+            let data = [trace, trace2];
+
+            let layout = {
+                title: 'График зависимостей',
+                xaxis: {
+                    title: xName + ': ' + xCode + ', (' + xEdIzm + ')',
+                    titlefont: {
+                        color: 'black',
+                        size: 13
+                    },
+                },
+                yaxis: {
+                    title: yName + ':' + yCode + ', (' + yEdIzm + ')',
+                    titlefont: {
+                        color: 'black',
+                        size: 13
+                    },
+                }
+            };
+
+            Plotly.newPlot('plot-point', data, layout);
+        </script>
+        {% endif %}
+
+
+
+
         <div class="row">
             <div class="col-md-12 col-lg-12 col-sm-12">
                 <div class="white-box">
@@ -83,7 +303,7 @@
                                         <a href="{{ path('parameter_value_edit', { 'project' : project.id, 'id': point.id, 'param_value' : itemParam['0'].id }) }}" data-toggle="tooltip" data-original-title="Изменить">
                                             <i class="fa fa-pencil text-inverse m-r-10"></i>
                                         </a>
-                                        <a href="{{ path('parameter_value_delete', { 'project' : project.id ,'id': point.id, 'param_value' : itemParam['0'].id }) }}" data-toggle="tooltip" data-original-title="Удалить">
+                                        <a class="js-delete" href="{{ path('parameter_value_delete', { 'project' : project.id ,'id': point.id, 'param_value' : itemParam['0'].id }) }}" data-toggle="tooltip" data-original-title="Удалить">
                                             <i class="fa fa-close text-danger"></i>
                                         </a>
                                     </td>
@@ -96,78 +316,6 @@
             </div>
         </div>
 
-
-            {% if arParamQ | length > 0 and arParamQ['0'].code != parameter.code %}
-
-                <div class="row">
-                    <div class="col-md-12 col-lg-12 col-sm-12">
-                        <div class="white-box">
-                            <div class="table-responsive">
-                                <div class="row m-t-20" style="min-width: 600px; width: 100%; max-width: 100%;" id="plot-point">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                {% block head_scripts %}
-                    <script src="{{ asset('js/plotly/plotly-basic-latest.min.js') }}"></script>
-                {% endblock %}
-
-                <script>
-
-                    let x = [];
-                    let y = [];
-                    let xName, xCode, xEdIzm,
-                        yName, yCode, yEdIzm;
-
-                    {% for itemParamQ in arParamQ %}
-                        x.push({{ itemParamQ.value }});
-                        xName = '{{ itemParamQ.name }}';
-                        xEdIzm = '{{ itemParamQ.edIzm }}';
-                        xCode = '{{ itemParamQ.code }}';
-                    {% endfor %}
-
-                    yName = '{{ parameter.name }}';
-                    yEdIzm = '{{ parameter.edIzm }}';
-                    yCode = '{{ parameter.code }}';
-
-                    {% for itemParam in arParameter %}
-                        y.push({{ itemParam['0'].value }});
-                    {% endfor %}
-
-                    let trace = {
-                        type: "scatter",
-                        mode: "markers",
-                        name: 'AAPL High',
-                        x: x,
-                        y: y,
-                        line: {color: '#17BECF'}
-                    };
-
-                    let data = [trace];
-
-                    let layout = {
-                        title: 'График зависимостей',
-                        xaxis: {
-                            title: xName + ': ' + xCode + ', ' + xEdIzm,
-                            titlefont: {
-                                color: 'black',
-                                size: 13
-                            },
-                        },
-                        yaxis: {
-                            title: yName + ':' + yCode + ', ' + yEdIzm,
-                            titlefont: {
-                                color: 'black',
-                                size: 13
-                            },
-                        }
-                    };
-
-                    Plotly.newPlot('plot-point', data, layout);
-                </script>
-            {% endif %}
         {% else %}
             <div class="row">
                 <div class="col-md-12 col-lg-12 col-sm-12">

@@ -1,6 +1,7 @@
 <?php
 
 namespace Andy\DiffuseRiverBundle\Repository;
+use Doctrine\ORM\Query;
 
 /**
  * ResultRepository
@@ -10,4 +11,34 @@ namespace Andy\DiffuseRiverBundle\Repository;
  */
 class ResultRepository extends \Doctrine\ORM\EntityRepository
 {
+
+    /**
+     * Получить результат по id проекта, точки и паратера, пребразет в массив обработав value из строки
+     *
+     * @param $projectId
+     * @param $pointId
+     * @param $parameterId
+     * @return array
+     */
+    public function getResult ($projectId, $pointId, $parameterId) {
+
+        $arResults = $this->createQueryBuilder('r')
+            ->select('r')
+            ->where('r.projectId = :project')
+            ->andWhere('r.pointId = :point')
+            ->andWhere('r.parameterId = :parameter')
+            ->setParameter('project', $projectId)
+            ->setParameter('point', $pointId)
+            ->setParameter('parameter', $parameterId)
+            ->getQuery()
+            ->getResult(Query::HYDRATE_ARRAY);
+
+        foreach ($arResults as $keyResult => $itemResult) {
+            $arResults[$keyResult]['value'] = json_decode($itemResult['value'], JSON_UNESCAPED_UNICODE);
+        }
+
+        return $arResults;
+
+    }
+
 }

@@ -3,10 +3,12 @@
 namespace Andy\DiffuseRiverBundle\Controller;
 
 
+use Andy\DiffuseRiverBundle\Classes\DiffuseMethods;
 use Andy\DiffuseRiverBundle\Entity\Parameter;
 use Andy\DiffuseRiverBundle\Entity\Point;
 use Andy\DiffuseRiverBundle\Entity\Project;
 use Andy\DiffuseRiverBundle\Entity\ParamValue;
+use Andy\DiffuseRiverBundle\Entity\Result;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Config\Definition\Exception\Exception;
 use Symfony\Component\HttpFoundation\Request;
@@ -63,12 +65,96 @@ class ParameterValueController extends Controller
         $arParamQ = $em->getRepository('AndyDiffuseRiverBundle:ParamValue')
             ->getValueByCodeParameter($point, 'Q');
 
+        // Получаем результаты сделанных ранее расчетов
+        $arResults = $em->getRepository('AndyDiffuseRiverBundle:Result')
+            ->getResult(
+                $project->getId(),
+                $point->getId(),
+                $parameter->getId()
+            );
+
+
+        $X = array();
+        $Y = array();
+        $YnoSort = array();
+        $Yfit = array();
+        $n = 0;
+
+
+        // Перебираем полученные параметра
+        foreach ($arParameter as $keyParameter => $itemParameter) {
+            // Перебираем данные параметра Q
+            foreach ($arParamQ as $keyParamQ => $itemParamQ) {
+                // Если даты совпадают, вычисляем, иначе выводим ошибку
+                if ($itemParameter['date'] == $itemParamQ['date']) {
+
+                    // Если парметр и Q имеют -1, то не вносим в график
+                    if (current($itemParameter)->getValue() == -1 || $itemParamQ['value'] == -1) {
+                        $n++;
+                        continue;
+                    } else {
+                        $Y[] = (double)current($itemParameter)->getValue();
+                        $X[] = (double)$itemParamQ['value'];
+
+                    }
+
+                }
+            }
+        }
+
+        // Если массивы сформированы
+        if (!empty($X) && !empty($Y)) {
+
+            // Сортируем X по возрастанию, сохраняя ключи
+            asort($X);
+
+            // Теперь конвертируем в лог-шкалу для X
+            $logX = array_map('log', $X);
+
+            // Находим логарифмическую линию тренда
+            $n = count($X);
+
+            function square ($x) {
+                return pow($x,2);
+            }
+
+            function multiply ($x, $y) {
+                return $x * $y;
+            }
+
+            $squaredLogX = array();
+            $xMultiplyY = array();
+            foreach ($logX as $keyLogX => $itemLogX) {
+                $squaredLogX[] = square($itemLogX);
+                $xMultiplyY[] = multiply($itemLogX, $Y[$keyLogX]);
+            }
+
+            $x_squared = array_sum($squaredLogX);
+            $xy = array_sum($xMultiplyY);
+
+            $bFit = ($n * $xy - array_sum($Y) * array_sum($logX)) /
+                ($n * $x_squared - pow(array_sum($logX), 2));
+
+            $aFit = (array_sum($Y) - $bFit * array_sum($logX)) / $n;
+
+            foreach($X as $x) {
+                $Yfit[] = $aFit + $bFit * log($x);
+            }
+
+        }
+
+
         return $this->render('@AndyDiffuseRiver/ParameterValue/show.html.twig', array(
             'arParameter' => $arParameter,
             'arParamQ' => $arParamQ,
             'parameter' => $parameter,
             'point' => $point,
             'project' => $project,
+            'diffuseMethod' => DiffuseMethods::typeMethods, // Получение методов рассчета
+            'results' => $arResults,
+            'X' => $X,
+            'Y' => $Y,
+            'Yfit' => $Yfit
         ));
 
     }
@@ -175,6 +261,16 @@ class ParameterValueController extends Controller
                     $em->remove($itemDel[0]);
                 }
 
+                $arResults = $em->getRepository('AndyDiffuseRiverBundle:Result')->findBy(array(
+                   'projectId'      => $project->getId(),
+                   'pointId'        => $point->getId(),
+                   'parameterId'    => $parameter->getId()
+                ));
+
+                foreach ($arResults as $itemResult) {
+                    $em->remove($itemResult);
+                }
+
                 $em->flush();
             }
         }
@@ -185,6 +281,22 @@ class ParameterValueController extends Controller
                 'id' => $point->getId()
             )
         );
+    }
+
+    public function deleteResultAction (Request $request, Project $project, Point $point, Parameter $parameter, Result $result) {
+
+        // Удалить по клику в общем списке
+        if ($request->getMethod() == 'GET') {
+            $em = $this->getDoctrine()->getManager();
+            $em->remove($result);
+            $em->flush();
+        }
+
+
+        return $this->redirectToRoute('parameter_value_show', array(
+            'id' => $point->getId(),
+            'project' => $project->getId(),
+            'parameter' => $parameter->getId()));
     }
 
     /**
