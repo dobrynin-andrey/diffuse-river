@@ -90,13 +90,15 @@
             <div class="col-md-12 col-lg-12 col-sm-12">
                 <div class="white-box">
                     <h2>Проекты</h2>
-                    {#<div class="row sales-report">
-                        <div class="col-md-6 col-sm-6 col-xs-6">
-                        </div>
-                        <div class="col-md-6 col-sm-6 col-xs-6 ">
-                            <h3 class="text-right text-info m-t-20"><a href="{{ path('project_new') }}">Создать новый</a></h3>
-                        </div>
-                    </div>#}
+        {% for label, messages in app.session.flashbag.all %}
+            {% for message in messages %}
+                {% if label == 'success' %}
+                    <p class="text-success m-b-5 font-13">{{ message }}</p>
+                {% else %}
+                    <p class="text-danger m-b-5 font-13">{{ message }}</p>
+                {% endif %}
+            {% endfor %}
+        {% endfor %}
                     <div class="table-responsive">
                         <table class="table">
                             <thead>

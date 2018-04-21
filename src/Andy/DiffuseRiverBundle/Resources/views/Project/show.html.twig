@@ -106,22 +106,21 @@
                         <div class="row">
                             <div class="col-md-6 col-sm-6 col-xs-12">
                                 <h2>Точки</h2>
-                                <p>Выберете точки, между которыми хотите произвести расчет.</p>
                             </div>
-                            <div class="col-md-6 col-sm-6 col-xs-12 text-right" style="line-height: 88px">
-                                <p class="di m-r-10 text-success js-ajax-result"></p>
-                                <p class="di m-r-10 text-danger js-ajax-error"></p>
-                                <img class="form-calculate-loader js-ajax-form-calculate-loader" src="{{ asset('plugins/images/preloader.gif') }}" alt="Загрузка...">
-                                <button type="submit" class="btn waves-effect waves-light btn-info">Рассчитать</button>
+                            {#<div class="col-md-6 col-sm-6 col-xs-12 text-right" style="line-height: 88px">#}
+                                {#<p class="di m-r-10 text-success js-ajax-result"></p>#}
+                                {#<p class="di m-r-10 text-danger js-ajax-error"></p>#}
+                                {#<img class="form-calculate-loader js-ajax-form-calculate-loader" src="{{ asset('plugins/images/preloader.gif') }}" alt="Загрузка...">#}
+                                {#<button type="submit" class="btn waves-effect waves-light btn-info">Рассчитать</button>#}
 
-                            </div>
+                            {#</div>#}
                         </div>
                         <div class="table-responsive">
                             <table class="table">
                                 <thead>
                                 <tr>
                                     <th>#</th>
-                                    <th>Выбрать</th>
+                                    {#<th>Выбрать</th>#}
                                     <th>Название</th>
                                     <th>Координаты</th>
                                     <th>Дата создания</th>
@@ -135,9 +134,9 @@
                                         <td>
                                             {{ loop.index }}
                                         </td>
-                                        <td>
-                                            <input name="point-{{ point.id }}" class="js-input-choose" id="checkbox-{{ point.id }}" type="checkbox" value="{{ point.id }}" title="point-{{ point.id }}">
-                                        </td>
+                                        {#<td>#}
+                                            {#<input name="point-{{ point.id }}" class="js-input-choose" id="checkbox-{{ point.id }}" type="checkbox" value="{{ point.id }}" title="point-{{ point.id }}">#}
+                                        {#</td>#}
                                         <td class="txt-oflo">
                                             <a href="{{ path('point_show', { 'project': project.id, 'id': point.id }) }}">
                                                 {{ point.name }}
@@ -208,7 +207,7 @@
 {% block javascripts %}
     <script src="{{ asset('js/ymap/ymap.project.js') }}"></script>
 
-    <script>
+    {#<script>
         $(document).ready(function () {
             var checklist = [];
             $(".js-input-choose").change(function() {
@@ -280,5 +279,5 @@ console.log(res.error.length);
                 });
             });
         });
-    </script>
+    </script>#}
 {% endblock %}
