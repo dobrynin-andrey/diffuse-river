@@ -12,3 +12,8 @@ point_delete:
     path:     /{project}/point/{id}/delete
     defaults: { _controller: "AndyDiffuseRiverBundle:Point:delete" }
     methods:  DELETE
+
+point_value_clean:
+    path:     /{project}/point/{id}/value_clean
+    defaults: { _controller: "AndyDiffuseRiverBundle:Point:cleanPointValue" }
+    methods:  DELETE

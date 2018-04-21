@@ -175,6 +175,27 @@
              return;
          }
 
+     });
+
+     $('.js-clean').click(function (event) {
+
+         event = event || window.event;
+
+         if (event.preventDefault) { // если метод существует
+             event.preventDefault(); // то вызвать его
+         } else { // иначе вариант IE8-:
+             event.returnValue = false;
+         }
+
+         var isDelete = confirm("Продолжить?");
+
+         if (isDelete) {
+             $(this).parent().submit();
+
+         } else {
+             return;
+         }
+
 
      });
 

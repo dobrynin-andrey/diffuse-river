@@ -172,6 +172,9 @@ class PointController extends Controller
             // Вызов функции по выводу параметров из базы
             $parameters = $this->renderParameters($point);
 
+            // Форма очистки данных
+            $cleanValueForm = $this->createCleanValueForm($project, $point);
+
             // Ответ при импорте
             return $this->render('@AndyDiffuseRiver/Point/show.html.twig', array(
                 'point' => $point,
@@ -179,12 +182,16 @@ class PointController extends Controller
                 'parameters' => $parameters,
                 'form_import' => $form_import->createView(),
                 'import_success' => $importResult['success'],
-                'import_error' => $importResult['error']
+                'import_error' => $importResult['error'],
+                'clean_value_form' => $cleanValueForm->createView()
             ));
         } // Конец - При отправке формы импорта
 
         // Вызов функции по выводу параметров из базы
         $parameters = $this->renderParameters($point);
+
+        // Форма очистки данных
+        $cleanValueForm = $this->createCleanValueForm($project, $point);
 
         // Ответ при простой загрузки страницы
         return $this->render('@AndyDiffuseRiver/Point/show.html.twig', array(
@@ -192,6 +199,7 @@ class PointController extends Controller
             'project' => $project,
             'parameters' => $parameters,
             'form_import' => $form_import->createView(),
+            'clean_value_form' => $cleanValueForm->createView()
         ));
     }
 
@@ -259,11 +267,64 @@ class PointController extends Controller
                     $em->remove($itemParamDateId);
                 }
             }
+
+            $arResults = $em->getRepository('AndyDiffuseRiverBundle:Result')->findBy(array(
+                'projectId'      => $project->getId(),
+                'pointId'        => $point->getId(),
+            ));
+
+            foreach ($arResults as $itemResult) {
+                $em->remove($itemResult);
+            }
+
             $em->remove($point);
             $em->flush();
         }
 
         return $this->redirectToRoute('project_show', array('id' => $project->getId()));
+    }
+
+    public function cleanPointValueAction(Project $project, Point $point) {
+        $em = $this->getDoctrine()->getManager();
+        // Находим ParamDate
+        $paramDateId = $em->getRepository('AndyDiffuseRiverBundle:ParamDate')->findBy(array(
+            'pointId' => $point->getId()
+        ));
+        if (!empty($paramDateId)) {
+            // Перебирем ParamDate и находим ParamValue
+            foreach ($paramDateId as $itemParamDateId) {
+                $paramValue = $em->getRepository('AndyDiffuseRiverBundle:ParamValue')->findBy(array(
+                    'paramDateId' => $itemParamDateId
+                ));
+                // Перебирем ParamValue и добавляем на удаление
+                if (!empty($paramValue)) {
+                    foreach ($paramValue as $itemParamValue) {
+                        $em->remove($itemParamValue);
+                    }
+                }
+                // Добавляем на удаление ParamDate
+                $em->remove($itemParamDateId);
+            }
+        }
+
+        $arResults = $em->getRepository('AndyDiffuseRiverBundle:Result')->findBy(array(
+            'projectId'      => $project->getId(),
+            'pointId'        => $point->getId(),
+        ));
+
+        foreach ($arResults as $itemResult) {
+            $em->remove($itemResult);
+        }
+
+        $em->flush();
+
+        return $this->redirectToRoute('point_show',
+            array(
+                'project'   => $project->getId(),
+                'id'        => $point->getId()
+            )
+        );
+
     }
 
     /**
@@ -281,4 +342,21 @@ class PointController extends Controller
             ->getForm()
         ;
     }
+
+    /**
+     * Creates a form to delete a point entity.
+     *
+     * @param Point $point The point entity
+     *
+     * @return \Symfony\Component\Form\Form The form
+     */
+    private function createCleanValueForm(Project $project, Point $point)
+    {
+        return $this->createFormBuilder()
+            ->setAction($this->generateUrl('point_value_clean', array('project' => $project->getId(), 'id' => $point->getId())))
+            ->setMethod('DELETE')
+            ->getForm()
+            ;
+    }
+
 }
