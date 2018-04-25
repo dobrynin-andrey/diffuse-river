@@ -212,7 +212,7 @@ class ParameterValueController extends Controller
         $parameter = $em->getRepository('AndyDiffuseRiverBundle:Parameter')->find($param_value->getParameterId());
 
         // Удалить по клику в общем списке
-        if ($request->getMethod() == 'GET') {
+        if ($request->getMethod() == 'POST') {
             $em = $this->getDoctrine()->getManager();
             $em->remove($param_value);
             $em->flush();
@@ -233,7 +233,7 @@ class ParameterValueController extends Controller
     {
 
         // Удалить по клику в общем списке
-        if ($request->getMethod() == 'GET') {
+        if ($request->getMethod() == 'POST') {
             $em = $this->getDoctrine()->getManager();
 
             // Выводим значения параметров текущей точки
@@ -286,7 +286,7 @@ class ParameterValueController extends Controller
     public function deleteResultAction (Request $request, Project $project, Point $point, Parameter $parameter, Result $result) {
 
         // Удалить по клику в общем списке
-        if ($request->getMethod() == 'GET') {
+        if ($request->getMethod() == 'POST') {
             $em = $this->getDoctrine()->getManager();
             $em->remove($result);
             $em->flush();

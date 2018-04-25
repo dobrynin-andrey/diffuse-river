@@ -144,9 +144,11 @@
                                         <a href="{{ path('parameter_value_show', {'project': project.id, 'id' : point.id, 'parameter' : parameter.id}) }}" data-toggle="tooltip" data-original-title="Изменить">
                                             <i class="fa fa-pencil text-inverse m-r-10"></i>
                                         </a>
-                                        <a class="js-delete" href="{{ path('parameter_value_delete_all', { 'project' : project.id, 'id': point.id, 'parameter': parameter.id }) }}" data-toggle="tooltip" data-original-title="Удалить">
-                                            <i class="fa fa-close text-danger"></i>
-                                        </a>
+                                       <form method="post" class="di" action="{{ path('parameter_value_delete_all', { 'project' : project.id, 'id': point.id, 'parameter': parameter.id }) }}">
+                                            <button type="submit" class="btn-link js-delete" data-toggle="tooltip" data-original-title="Удалить">
+                                                <i class="fa fa-close text-danger"></i>
+                                            </button>
+                                        </form>
                                     </td>
                                 </tr>
                             {% endfor %}

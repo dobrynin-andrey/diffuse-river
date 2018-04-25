@@ -16,14 +16,14 @@ parameter_value_new:
 parameter_value_delete:
     path:     /{project}/point/{id}/param_value/{param_value}/delete
     defaults: { _controller: "AndyDiffuseRiverBundle:ParameterValue:delete" }
-    methods:  [GET, DELETE]
+    methods:  [POST, DELETE]
 
 parameter_value_delete_all:
     path:     /{project}/point/{id}/param/{parameter}/delete_all
     defaults: { _controller: "AndyDiffuseRiverBundle:ParameterValue:deleteAll" }
-    methods:  [GET, DELETE]
+    methods:  [POST, DELETE]
 
 parameter_value_result_delete:
     path:     /{project}/point/{id}/param/{parameter}/result/{result}/delete
     defaults: { _controller: "AndyDiffuseRiverBundle:ParameterValue:deleteResult" }
-    methods:  [GET, DELETE]
+    methods:  [POST, DELETE]

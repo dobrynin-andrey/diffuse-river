@@ -165,9 +165,11 @@
                                         {% if result.updatedDate %}{{ result.updatedDate|date('d.m.Y H:i') }}{% endif %}
                                     </td>
                                     <td>
-                                        <a class="js-delete" href="{{ path('parameter_value_result_delete', { 'project' : project.id, 'id': point.id, 'parameter': parameter.id, 'result': result.id }) }}" data-toggle="tooltip" data-original-title="Удалить">
-                                            <i class="fa fa-close text-danger"></i>
-                                        </a>
+                                        <form method="post" class="di" action="{{ path('parameter_value_result_delete', { 'project' : project.id, 'id': point.id, 'parameter': parameter.id, 'result': result.id }) }}">
+                                            <button type="submit" class="btn-link js-delete" data-toggle="tooltip" data-original-title="Удалить">
+                                                <i class="fa fa-close text-danger"></i>
+                                            </button>
+                                        </form>
                                     </td>
                                 </tr>
                             {% endfor %}
@@ -264,11 +266,15 @@
             <div class="col-md-12 col-lg-12 col-sm-12">
                 <div class="white-box">
                     <div class="row">
-                        <div class="col-md-6 col-sm-6 col-xs-6">
+                        <div class="col-md-6 col-sm-6 col-xs-12">
                             <h3>Значения параметра текущей точки</h3>
                         </div>
-                        <div class="col-md-6 col-sm-6 col-xs-6 text-right">
-                            <a class="di btn btn-danger js-delete" href="{{ path('parameter_value_delete_all', { 'project' : project.id, 'id': point.id, 'parameter': parameter.id }) }}">Удалить все</a>
+                        <div class="col-md-6 col-sm-6 col-xs-12 text-right">
+                            <form method="post" class="di" action="{{ path('parameter_value_delete_all', { 'project' : project.id, 'id': point.id, 'parameter': parameter.id }) }}">
+                                <button type="submit" class="btn btn-danger js-delete">
+                                    Удалить все
+                                </button>
+                            </form>
                         </div>
                     </div>
                     <div class="table-responsive">
@@ -303,9 +309,11 @@
                                         <a href="{{ path('parameter_value_edit', { 'project' : project.id, 'id': point.id, 'param_value' : itemParam['0'].id }) }}" data-toggle="tooltip" data-original-title="Изменить">
                                             <i class="fa fa-pencil text-inverse m-r-10"></i>
                                         </a>
-                                        <a class="js-delete" href="{{ path('parameter_value_delete', { 'project' : project.id ,'id': point.id, 'param_value' : itemParam['0'].id }) }}" data-toggle="tooltip" data-original-title="Удалить">
-                                            <i class="fa fa-close text-danger"></i>
-                                        </a>
+                                        <form method="post" class="di" action="{{ path('parameter_value_delete', { 'project' : project.id ,'id': point.id, 'param_value' : itemParam['0'].id }) }}">
+                                            <button type="submit" class="btn-link js-delete" data-toggle="tooltip" data-original-title="Удалить">
+                                                <i class="fa fa-close text-danger"></i>
+                                            </button>
+                                        </form>
                                     </td>
                                 </tr>
                             {% endfor %}
