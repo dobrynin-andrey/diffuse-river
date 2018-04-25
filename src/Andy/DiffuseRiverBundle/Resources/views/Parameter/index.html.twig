@@ -24,7 +24,11 @@
                         </div>
                         <div class="col-md-6 col-sm-6 col-xs-6 text-right">
                             <a class="di m-t-20 btn btn-success" href="{{ path('parameter_new') }}">Создать новый параметр</a>
-                            <a class="di m-t-20 btn btn-danger m-l-10 js-delete" href="{{ path('parameter_delete_all') }}">Удалить все</a>
+                            <br>
+                            <br>
+                            {{ form_start(delete_all) }}
+                            <button type="submit" class="btn waves-effect waves-light btn-danger js-clean">Удалить все</button>
+                            {{ form_end(delete_all) }}
                         </div>
                     </div>
                     <div class="table-responsive">

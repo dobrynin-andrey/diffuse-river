@@ -25,8 +25,11 @@ class ParameterController extends Controller
 
         $parameters = $em->getRepository('AndyDiffuseRiverBundle:Parameter')->findAll();
 
+        $formDeleteAll = $this->createDeleteAllForm();
+
         return $this->render('@AndyDiffuseRiver/Parameter/index.html.twig', array(
             'parameters' => $parameters,
+            'delete_all' => $formDeleteAll->createView()
         ));
     }
 
@@ -194,8 +197,11 @@ class ParameterController extends Controller
     public function delete_allAction(Request $request)
     {
 
+        $formDeleteAll = $this->createDeleteAllForm();
+        $formDeleteAll->handleRequest($request);
+
         // Удалить по клику в общем списке
-        if ($request->getMethod() == 'GET') {
+        if ($formDeleteAll->isSubmitted() && $formDeleteAll->isValid()) {
             $em = $this->getDoctrine()->getManager();
 
             $delParameter = $em->getRepository('AndyDiffuseRiverBundle:Parameter')->findAll();
@@ -206,8 +212,6 @@ class ParameterController extends Controller
 
                 $em->flush();
             }
-
-
         }
 
 
@@ -229,4 +233,20 @@ class ParameterController extends Controller
             ->getForm()
         ;
     }
+
+    /**
+     * Creates a form to deleteAll value a parameter entity.
+     *
+     * @return \Symfony\Component\Form\FormInterface
+     *
+     */
+    private function createDeleteAllForm()
+    {
+        return $this->createFormBuilder()
+            ->setAction($this->generateUrl('parameter_delete_all'))
+            ->setMethod('DELETE')
+            ->getForm()
+            ;
+    }
+
 }

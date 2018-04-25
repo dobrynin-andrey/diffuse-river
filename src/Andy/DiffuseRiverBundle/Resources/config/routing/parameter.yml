@@ -21,4 +21,4 @@ parameter_delete:
 parameter_delete_all:
     path:     /delete_all
     defaults: { _controller: "AndyDiffuseRiverBundle:Parameter:delete_all" }
-    methods:  [GET]
+    methods:  [DELETE]
