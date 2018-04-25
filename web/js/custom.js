@@ -169,12 +169,11 @@
          var isDelete = confirm("Удалить?");
 
          if (isDelete) {
-             window.location.href = location.origin + $(this).attr('href');
+             $(this).parent().submit();
 
          } else {
              return;
          }
-
      });
 
      $('.js-clean').click(function (event) {

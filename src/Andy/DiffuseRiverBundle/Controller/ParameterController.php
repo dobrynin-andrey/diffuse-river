@@ -178,7 +178,7 @@ class ParameterController extends Controller
         }
 
         // Удалить по клику в общем списке
-        if ($request->getMethod() == 'GET') {
+        if ($request->getMethod() == 'POST') {
             $em = $this->getDoctrine()->getManager();
 
             $delParameter = $em->getRepository('AndyDiffuseRiverBundle:Parameter')->find($parameter);
