@@ -128,6 +128,11 @@
                                 <i class="fa fa-cog fa-fw" aria-hidden="true"></i>Параметры
                             </a>
                         </li>
+                        <li>
+                            <a href="{{ path('andy_diffuse_river_about') }}" class="waves-effect {% if app.request.requestUri == path('andy_diffuse_river_about') or 'about' in url %}active{% endif %}">
+                                <i class="fa fa-info fa-fw" aria-hidden="true"></i>О проекте
+                            </a>
+                        </li>
 
                         {#
 

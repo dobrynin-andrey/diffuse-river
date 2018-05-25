@@ -8,6 +8,10 @@ use Symfony\Component\HttpFoundation\Request;
 
 class IndexController extends Controller
 {
+    /**
+     * @param Request $request
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
+     */
     public function indexAction(Request $request)
     {
 

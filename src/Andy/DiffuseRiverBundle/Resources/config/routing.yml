@@ -3,8 +3,8 @@ andy_diffuse_river_homepage:
     defaults: { _controller: AndyDiffuseRiverBundle:Index:index }
 
 andy_diffuse_river_parameter:
-        resource: "@AndyDiffuseRiverBundle/Resources/config/routing/parameter.yml"
-        prefix:   /parameter
+    resource: "@AndyDiffuseRiverBundle/Resources/config/routing/parameter.yml"
+    prefix:   /parameter
 
 andy_diffuse_river_project:
     resource: "@AndyDiffuseRiverBundle/Resources/config/routing/project.yml"
@@ -17,3 +17,7 @@ andy_diffuse_river_point:
 andy_diffuse_river_parameter_value:
     resource: "@AndyDiffuseRiverBundle/Resources/config/routing/parameter_value.yml"
     prefix:   /project
+
+andy_diffuse_river_about:
+    path:     /about
+    defaults: { _controller: AndyDiffuseRiverBundle:About:about }
