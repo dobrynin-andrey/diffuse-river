@@ -23,5 +23,5 @@ andy_diffuse_river_calculate:
     defaults: { _controller: AndyDiffuseRiverBundle:Calculate:index }
 
 andy_diffuse_river_about:
-    path:     /about
+    path:     /about/
     defaults: { _controller: AndyDiffuseRiverBundle:About:about }
