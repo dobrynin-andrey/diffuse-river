@@ -26,7 +26,11 @@ class CalculateController extends Controller
 
         if ($request->isMethod('post')) {
 
-            $method = $request->get('method');
+
+            // Выбор алгоритма, для последующего функционала
+            //$method = $request->get('method');
+            // Пока будет зашит, как A
+            $method = 'A';
 
             $em = $this->getDoctrine()->getManager();
 
@@ -155,8 +159,9 @@ class CalculateController extends Controller
                         $em->persist($result); // "Коммитим" изменения перед отпоавкой в БД
                         $em->flush();
 
-                        $this->addFlash('success', "Данные случая $method успешно рассчитаны!");
-                        $this->addFlash('error', "Параметры с данными '-1', не участвуют в рассчетах, таких данных: $n");
+                        //$this->addFlash('success', "Данные случая $method успешно рассчитаны!");
+                        $this->addFlash('success', "Данные успешно рассчитаны!");
+                        $this->addFlash('error', 'Параметры с данными "-1", не участвуют в расчетах, таких данных: ' . $n);
                         return $this->redirectToRoute('parameter_value_show', array(
                             'project' => $project->getId(),
                             'id' => $point->getId(),

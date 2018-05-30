@@ -10,9 +10,9 @@
 {% endblock %}
 
 {% block breadcrumb %}
-<li><a href="{{ path('project_show', { 'id': project.id }) }}">{{ project.name }}</a><li>
-<li><a href="{{ path('point_show', { 'project': project.id, 'id': point.id  }) }}">{{ point.name }}</a><li>
-    {{ parameter.name }}
+<li><a href="{{ path('project_show', { 'id': project.id }) }}">{{ project.name }}</a></li>
+<li><a href="{{ path('point_show', { 'project': project.id, 'id': point.id  }) }}">{{ point.name }}</a></li>
+<li>{{ parameter.name }}</li>
     {% endblock %}
 
     {% block body %}
@@ -68,7 +68,8 @@
                     <div class="select-method">
                         <div class="row">
                             <div class="col-md-6 col-sm-6 col-xs-6">
-                                <h3>Выберите алгоритм расчета, исходя из графика:</h3>
+                                <h3>Расчет диффузной нагрузки</h3>
+                                <p>Для получения результата нажмите на кнопку:</p>
                             </div>
                         </div>
 
@@ -86,12 +87,12 @@
                             <input name="project" value="{{ project.id }}" type="hidden">
                             <input name="point" value="{{ point.id }}" type="hidden">
                             <input name="parameter" value="{{ parameter.id }}" type="hidden">
-                            <select class="m-r-20" name="method" id="method">
+                            {#<select class="m-r-20" name="method" id="method">
                                 <option value="0" selected>Не выбран</option>
                                 {% for itemMethod in diffuseMethod  %}
                                     <option value="{{ itemMethod }}">Случай {{ itemMethod }}</option>
                                 {% endfor %}
-                            </select>
+                            </select>#}
                             <button class="btn btn-info" type="submit">Рассчитать</button>
                         </form>
 

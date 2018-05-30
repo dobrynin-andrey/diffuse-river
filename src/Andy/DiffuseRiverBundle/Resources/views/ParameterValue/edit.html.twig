@@ -9,9 +9,9 @@
 {% endblock %}
 
 {% block breadcrumb %}
-<li><a href="{{ path('project_show', { 'id': project.id }) }}">{{ project.name }}</a><li>
-<li><a href="{{ path('point_show', { 'project' : project.id, 'id': point.id }) }}">{{ point.name }}</a><li>
-<li><a href="{{ path('parameter_value_show', { 'project' : project.id, 'id' : point.id, 'parameter' : parameter.id}) }}">{{ parameter.name }}</a><li>
+<li><a href="{{ path('project_show', { 'id': project.id }) }}">{{ project.name }}</a></li>
+<li><a href="{{ path('point_show', { 'project' : project.id, 'id': point.id }) }}">{{ point.name }}</a></li>
+<li><a href="{{ path('parameter_value_show', { 'project' : project.id, 'id' : point.id, 'parameter' : parameter.id}) }}">{{ parameter.name }}</a></li>
 {% endblock %}
 
 {% block body %}
